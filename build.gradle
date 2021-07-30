@@ -1,0 +1,70 @@
+buildscript {
+    ext.kotlin_version = '1.3.70'
+
+    repositories {
+        mavenCentral()
+        maven {
+            name 'JFrog OSS snapshot repo'
+            url  'https://oss.jfrog.org/oss-snapshot-local/'
+        }
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'antlr'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    antlr "org.antlr:antlr4:4.9.1"
+    compile "org.antlr:antlr4-runtime:4.9.1"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testCompile 'junit:junit:4.13'
+}
+
+generateGrammarSource {
+    maxHeapSize = "64m"
+    arguments += ['-visitor', '-package',  'parsing.parser']
+    outputDirectory = new File("generated-src".toString())
+}
+compileJava.dependsOn generateGrammarSource
+sourceSets {
+    generated {
+        java.srcDir 'generated-src/'
+    }
+}
+/*compileJava.source sourceSets.main.java
+compileKotlin.source sourceSets.main.java
+compileTestKotlin.source sourceSets.test.java*/
+
+
+clean{
+    delete "generated-src"
+}
+
+idea {
+    module {
+        sourceDirs += file("generated-src")
+    }
+}
+
+// show results when running gradlew test
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}

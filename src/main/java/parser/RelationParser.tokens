@@ -1,0 +1,17 @@
+NEWLINE=1
+WS=2
+SEMI=3
+CONJ=4
+COMP=5
+LPARAN=6
+RPARAN=7
+COMPONENT=8
+REFINES=9
+NOTREFINES=10
+';'=3
+'&&'=4
+'||'=5
+'('=6
+')'=7
+'<='=9
+'</='=10
