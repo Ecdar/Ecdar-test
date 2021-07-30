@@ -1,6 +1,5 @@
+import facts.RelationLoader
 import parsing.RelationParserFacade
-import parsing.RelationVisitor
-import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
@@ -28,11 +27,7 @@ internal class RelationParserFacadeTest {
 
     @Test
     fun visit1() {
-        val parse = RelationParserFacade.parse(
-            File("src/test/kotlin/facts.txt").readText(Charsets.UTF_8))!!
-        val visitor = RelationVisitor()
-        parse.accept(visitor)
-        for (comp in visitor.components) {
+        for (comp in RelationLoader.relations) {
             val refines = comp.thisRefines.toString()
             val oRefines = comp.refinesThis.toString()
 
