@@ -38,13 +38,13 @@ dependencies {
 
 generateGrammarSource {
     maxHeapSize = "64m"
-    arguments += ['-visitor', '-package',  'parsing.parser']
-    outputDirectory = new File("generated-src".toString())
+    arguments += ['-visitor', '-package',  'parser']
+    outputDirectory = new File("src/main/java/parser".toString())
 }
 compileJava.dependsOn generateGrammarSource
 sourceSets {
     generated {
-        java.srcDir 'generated-src/'
+        java.srcDir 'src/main/java/parser/'
     }
 }
 /*compileJava.source sourceSets.main.java
