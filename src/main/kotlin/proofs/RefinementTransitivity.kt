@@ -9,10 +9,8 @@ class RefinementTransitivity: Proof {
                     lhs.thisRefines.add(rhs)
                     rhs.refinesThis.add(lhs)
 
-                    println(lhs.toString() + " <= " + rhs.toString())
-
-                    ctx.set_dirty(lhs)
-                    ctx.set_dirty(rhs)
+                    ctx.setDirty(lhs)
+                    ctx.setDirty(rhs)
                 }
             }
         }

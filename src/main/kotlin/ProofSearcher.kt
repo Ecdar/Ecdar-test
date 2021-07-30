@@ -1,24 +1,30 @@
 import parsing.System
 import proofs.Proof
 import proofs.RefinementTransitivity
+import proofs.SelfRefinement
 
-class ProofSearcher  {
-    private val theorems: Array<Proof> = Array(1){RefinementTransitivity()}
+class ProofSearcher {
+    private val theorems: Array<Proof> = Array(2) {
+        RefinementTransitivity()
+        SelfRefinement()
+    }
 
     fun findNewRelations(components: ArrayList<System>): ArrayList<System> {
-        var allComponents = ArrayList<System>(components)
+        val allComponents = ArrayList<System>(components)
         var dirtyComponents = components
 
-       while( dirtyComponents.isNotEmpty() ){
-           dirtyComponents = searchIteration(dirtyComponents, allComponents)
-       }
+        while (dirtyComponents.isNotEmpty()) {
+            dirtyComponents = searchIteration(dirtyComponents, allComponents)
+        }
 
         return allComponents
     }
 
-    private fun searchIteration(dirty_components: ArrayList<System>, all_components: ArrayList<System>): ArrayList<System> {
-        var context = IterationContext(all_components)
-println("Iteration")
+    private fun searchIteration(
+        dirty_components: ArrayList<System>,
+        all_components: ArrayList<System>
+    ): ArrayList<System> {
+        val context = IterationContext(all_components)
 
         for (comp in dirty_components) {
             for (theorem in theorems) {
@@ -33,11 +39,11 @@ println("Iteration")
         var components = components
         var newlyMarkedComponents = ArrayList<System>()
 
-        fun set_dirty(component: System) {
+        fun setDirty(component: System) {
             newlyMarkedComponents.add(component)
         }
 
-        fun add_new_component(component: System) {
+        fun addNewComponent(component: System) {
             components.add(component)
             newlyMarkedComponents.add(component)
         }
