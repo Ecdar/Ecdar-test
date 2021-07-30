@@ -2,16 +2,18 @@ import parsing.System
 import proofs.Proof
 import proofs.RefinementTransitivity
 import proofs.SelfRefinement
+import proofs.Theorem6Conj2
 
 class ProofSearcher {
     private val theorems: Array<Proof> = arrayOf(
         RefinementTransitivity(),
-        SelfRefinement()
+        SelfRefinement(),
+        Theorem6Conj2()
     )
 
     fun findNewRelations(components: ArrayList<System>): ArrayList<System> {
         val allComponents = ArrayList<System>(components)
-        var dirtyComponents = components
+        var dirtyComponents = HashSet(components)
 
         while (dirtyComponents.isNotEmpty()) {
             dirtyComponents = searchIteration(dirtyComponents, allComponents)
@@ -21,11 +23,10 @@ class ProofSearcher {
     }
 
     private fun searchIteration(
-        dirty_components: ArrayList<System>,
+        dirty_components: HashSet<System>,
         all_components: ArrayList<System>
-    ): ArrayList<System> {
+    ): HashSet<System> {
         val context = IterationContext(all_components)
-        println("Iteration")
         for (comp in dirty_components) {
 
             for (theorem in theorems) {
@@ -38,15 +39,21 @@ class ProofSearcher {
 
     class IterationContext(components: ArrayList<System>) {
         var components = components
-        var newlyMarkedComponents = ArrayList<System>()
+        var newlyMarkedComponents = HashSet<System>()
 
         fun setDirty(component: System) {
             newlyMarkedComponents.add(component)
         }
 
-        fun addNewComponent(component: System) {
+        fun addNewComponent(component: System) : System {
+            for (comp in components) {
+                if (comp.sameAs(component)) {
+                    return comp
+                }
+            }
             components.add(component)
             newlyMarkedComponents.add(component)
+            return component
         }
     }
 
