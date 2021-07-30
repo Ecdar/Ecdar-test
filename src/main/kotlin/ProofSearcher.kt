@@ -4,10 +4,10 @@ import proofs.RefinementTransitivity
 import proofs.SelfRefinement
 
 class ProofSearcher {
-    private val theorems: Array<Proof> = Array(2) {
-        RefinementTransitivity()
+    private val theorems: Array<Proof> = arrayOf(
+        RefinementTransitivity(),
         SelfRefinement()
-    }
+    )
 
     fun findNewRelations(components: ArrayList<System>): ArrayList<System> {
         val allComponents = ArrayList<System>(components)
@@ -25,8 +25,9 @@ class ProofSearcher {
         all_components: ArrayList<System>
     ): ArrayList<System> {
         val context = IterationContext(all_components)
-
+        println("Iteration")
         for (comp in dirty_components) {
+
             for (theorem in theorems) {
                 theorem.search(comp, context)
             }
