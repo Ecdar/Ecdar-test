@@ -1,5 +1,7 @@
 package parsing
 
+import facts.RelationLoader.prefixMap
+
 interface System {
     val refinesThis: ArrayList<System>
     val thisRefines: ArrayList<System>
@@ -26,7 +28,12 @@ interface System {
      override fun toString(): String
 }
 
-class Component(val firstName: String) : System {
+class Component(val prefix: String, val comp: String) : System {
+
+    init {
+        assert(prefix in prefixMap) { "Unknown prefix $prefix for component $comp" }
+    }
+
     var rt = ArrayList<System>()
     var tr = ArrayList<System>()
     var nrt = ArrayList<System>()
@@ -42,13 +49,13 @@ class Component(val firstName: String) : System {
 
     override fun sameAs(other: System): Boolean {
         if(other is Component) {
-            return firstName == other.firstName
+            return prefix == other.prefix && comp == other.comp
         }
         return false
     }
 
     override fun toString(): String {
-        return firstName
+        return "$prefix.$comp"
     }
 
 
@@ -78,7 +85,7 @@ class Conjunction(left: System, right: System) : System {
     }
 
     override fun toString(): String {
-        return "(${children.joinToString("&&")})"
+        return "(${children.joinToString(" && ")})"
     }
 
     init {
@@ -121,7 +128,7 @@ class Composition(left: System, right: System) : System {
     }
 
     override fun toString(): String {
-        return "(${children.joinToString("||")})"
+        return "(${children.joinToString(" || ")})"
     }
 
     init {

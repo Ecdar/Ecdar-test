@@ -17,8 +17,8 @@ public class RelationParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		NEWLINE=1, WS=2, SEMI=3, CONJ=4, COMP=5, LPARAN=6, RPARAN=7, COMPONENT=8, 
-		REFINES=9, NOTREFINES=10;
+		NEWLINE=1, WS=2, SEMI=3, CONJ=4, COMP=5, LPARAN=6, RPARAN=7, VAR_NAME=8, 
+		DOT=9, REFINES=10, NOTREFINES=11;
 	public static final int
 		RULE_full = 0, RULE_facts = 1, RULE_fact = 2, RULE_refinement = 3, RULE_nonrefinement = 4, 
 		RULE_system = 5, RULE_conj_system = 6, RULE_term = 7;
@@ -32,15 +32,15 @@ public class RelationParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, null, null, "';'", "'&&'", "'||'", "'('", "')'", null, "'<='", 
+			null, null, null, "';'", "'&&'", "'||'", "'('", "')'", null, "'.'", "'<='", 
 			"'</='"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "NEWLINE", "WS", "SEMI", "CONJ", "COMP", "LPARAN", "RPARAN", "COMPONENT", 
-			"REFINES", "NOTREFINES"
+			null, "NEWLINE", "WS", "SEMI", "CONJ", "COMP", "LPARAN", "RPARAN", "VAR_NAME", 
+			"DOT", "REFINES", "NOTREFINES"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -598,7 +598,13 @@ public class RelationParser extends Parser {
 	}
 
 	public static class TermContext extends ParserRuleContext {
-		public TerminalNode COMPONENT() { return getToken(RelationParser.COMPONENT, 0); }
+		public Token prefix;
+		public Token comp;
+		public TerminalNode DOT() { return getToken(RelationParser.DOT, 0); }
+		public List<TerminalNode> VAR_NAME() { return getTokens(RelationParser.VAR_NAME); }
+		public TerminalNode VAR_NAME(int i) {
+			return getToken(RelationParser.VAR_NAME, i);
+		}
 		public TerminalNode LPARAN() { return getToken(RelationParser.LPARAN, 0); }
 		public SystemContext system() {
 			return getRuleContext(SystemContext.class,0);
@@ -627,24 +633,28 @@ public class RelationParser extends Parser {
 		TermContext _localctx = new TermContext(_ctx, getState());
 		enterRule(_localctx, 14, RULE_term);
 		try {
-			setState(81);
+			setState(83);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case COMPONENT:
+			case VAR_NAME:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(76);
-				match(COMPONENT);
+				((TermContext)_localctx).prefix = match(VAR_NAME);
+				setState(77);
+				match(DOT);
+				setState(78);
+				((TermContext)_localctx).comp = match(VAR_NAME);
 				}
 				break;
 			case LPARAN:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(77);
-				match(LPARAN);
-				setState(78);
-				system(0);
 				setState(79);
+				match(LPARAN);
+				setState(80);
+				system(0);
+				setState(81);
 				match(RPARAN);
 				}
 				break;
@@ -688,27 +698,27 @@ public class RelationParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\fV\4\2\t\2\4\3\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\rX\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\3\2\7\2\24\n\2\f\2"+
 		"\16\2\27\13\2\3\2\3\2\3\2\3\3\3\3\6\3\36\n\3\r\3\16\3\37\3\3\3\3\3\3\3"+
 		"\3\7\3&\n\3\f\3\16\3)\13\3\5\3+\n\3\3\4\3\4\5\4/\n\4\3\5\3\5\3\5\3\5\3"+
 		"\6\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\7\7?\n\7\f\7\16\7B\13\7\3\b\3\b"+
-		"\3\b\3\b\3\b\3\b\7\bJ\n\b\f\b\16\bM\13\b\3\t\3\t\3\t\3\t\3\t\5\tT\n\t"+
-		"\3\t\2\4\f\16\n\2\4\6\b\n\f\16\20\2\2\2U\2\25\3\2\2\2\4*\3\2\2\2\6.\3"+
-		"\2\2\2\b\60\3\2\2\2\n\64\3\2\2\2\f8\3\2\2\2\16C\3\2\2\2\20S\3\2\2\2\22"+
-		"\24\7\3\2\2\23\22\3\2\2\2\24\27\3\2\2\2\25\23\3\2\2\2\25\26\3\2\2\2\26"+
-		"\30\3\2\2\2\27\25\3\2\2\2\30\31\5\4\3\2\31\32\7\2\2\3\32\3\3\2\2\2\33"+
-		"\35\5\6\4\2\34\36\7\3\2\2\35\34\3\2\2\2\36\37\3\2\2\2\37\35\3\2\2\2\37"+
-		" \3\2\2\2 !\3\2\2\2!\"\5\4\3\2\"+\3\2\2\2#\'\5\6\4\2$&\7\3\2\2%$\3\2\2"+
-		"\2&)\3\2\2\2\'%\3\2\2\2\'(\3\2\2\2(+\3\2\2\2)\'\3\2\2\2*\33\3\2\2\2*#"+
-		"\3\2\2\2+\5\3\2\2\2,/\5\b\5\2-/\5\n\6\2.,\3\2\2\2.-\3\2\2\2/\7\3\2\2\2"+
-		"\60\61\5\f\7\2\61\62\7\13\2\2\62\63\5\f\7\2\63\t\3\2\2\2\64\65\5\f\7\2"+
-		"\65\66\7\f\2\2\66\67\5\f\7\2\67\13\3\2\2\289\b\7\1\29:\5\16\b\2:@\3\2"+
-		"\2\2;<\f\4\2\2<=\7\7\2\2=?\5\f\7\5>;\3\2\2\2?B\3\2\2\2@>\3\2\2\2@A\3\2"+
-		"\2\2A\r\3\2\2\2B@\3\2\2\2CD\b\b\1\2DE\5\20\t\2EK\3\2\2\2FG\f\4\2\2GH\7"+
-		"\6\2\2HJ\5\16\b\5IF\3\2\2\2JM\3\2\2\2KI\3\2\2\2KL\3\2\2\2L\17\3\2\2\2"+
-		"MK\3\2\2\2NT\7\n\2\2OP\7\b\2\2PQ\5\f\7\2QR\7\t\2\2RT\3\2\2\2SN\3\2\2\2"+
-		"SO\3\2\2\2T\21\3\2\2\2\n\25\37\'*.@KS";
+		"\3\b\3\b\3\b\3\b\7\bJ\n\b\f\b\16\bM\13\b\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5"+
+		"\tV\n\t\3\t\2\4\f\16\n\2\4\6\b\n\f\16\20\2\2\2W\2\25\3\2\2\2\4*\3\2\2"+
+		"\2\6.\3\2\2\2\b\60\3\2\2\2\n\64\3\2\2\2\f8\3\2\2\2\16C\3\2\2\2\20U\3\2"+
+		"\2\2\22\24\7\3\2\2\23\22\3\2\2\2\24\27\3\2\2\2\25\23\3\2\2\2\25\26\3\2"+
+		"\2\2\26\30\3\2\2\2\27\25\3\2\2\2\30\31\5\4\3\2\31\32\7\2\2\3\32\3\3\2"+
+		"\2\2\33\35\5\6\4\2\34\36\7\3\2\2\35\34\3\2\2\2\36\37\3\2\2\2\37\35\3\2"+
+		"\2\2\37 \3\2\2\2 !\3\2\2\2!\"\5\4\3\2\"+\3\2\2\2#\'\5\6\4\2$&\7\3\2\2"+
+		"%$\3\2\2\2&)\3\2\2\2\'%\3\2\2\2\'(\3\2\2\2(+\3\2\2\2)\'\3\2\2\2*\33\3"+
+		"\2\2\2*#\3\2\2\2+\5\3\2\2\2,/\5\b\5\2-/\5\n\6\2.,\3\2\2\2.-\3\2\2\2/\7"+
+		"\3\2\2\2\60\61\5\f\7\2\61\62\7\f\2\2\62\63\5\f\7\2\63\t\3\2\2\2\64\65"+
+		"\5\f\7\2\65\66\7\r\2\2\66\67\5\f\7\2\67\13\3\2\2\289\b\7\1\29:\5\16\b"+
+		"\2:@\3\2\2\2;<\f\4\2\2<=\7\7\2\2=?\5\f\7\5>;\3\2\2\2?B\3\2\2\2@>\3\2\2"+
+		"\2@A\3\2\2\2A\r\3\2\2\2B@\3\2\2\2CD\b\b\1\2DE\5\20\t\2EK\3\2\2\2FG\f\4"+
+		"\2\2GH\7\6\2\2HJ\5\16\b\5IF\3\2\2\2JM\3\2\2\2KI\3\2\2\2KL\3\2\2\2L\17"+
+		"\3\2\2\2MK\3\2\2\2NO\7\n\2\2OP\7\13\2\2PV\7\n\2\2QR\7\b\2\2RS\5\f\7\2"+
+		"ST\7\t\2\2TV\3\2\2\2UN\3\2\2\2UQ\3\2\2\2V\21\3\2\2\2\n\25\37\'*.@KU";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

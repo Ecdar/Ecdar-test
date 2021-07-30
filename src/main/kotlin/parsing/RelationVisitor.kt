@@ -47,7 +47,7 @@ class RelationVisitor : RelationParserBaseVisitor<System?>() {
 
     override fun visitTerm(ctx: RelationParser.TermContext?): System? {
         ctx?.system()?.let { return it.accept(this) }
-        val comp = Component(ctx?.COMPONENT()?.symbol?.text!!)
+        val comp = Component(ctx?.prefix?.text!!, ctx?.comp?.text!!)
 
         return addOrGet(comp)
     }

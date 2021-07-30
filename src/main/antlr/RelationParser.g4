@@ -18,6 +18,6 @@ system    : system COMP system
 conj_system : conj_system CONJ conj_system
             | term;
 
-term    : COMPONENT
+term    : prefix=VAR_NAME DOT comp=VAR_NAME
         | LPARAN system RPARAN;
 
