@@ -10,20 +10,16 @@ class RelationVisitor : RelationParserBaseVisitor<System?>() {
     override fun visitRefinement(ctx: RelationParser.RefinementContext?): System? {
         val left = ctx?.left?.accept(this)!!
         val right = ctx.right?.accept(this)!!
-        if (!left.sameAs(right)) {
-            left.refinesOther(right)
-            right.otherRefines(left)
-        }
+        left.refinesOther(right)
+        right.otherRefines(left)
         return null
     }
 
     override fun visitNonrefinement(ctx: RelationParser.NonrefinementContext?): System? {
         val left = ctx?.left?.accept(this)!!
         val right = ctx.right?.accept(this)!!
-        if (!left.sameAs(right)) {
-            left.notRefinesOther(right)
-            right.otherNotRefines(left)
-        }
+        left.notRefinesOther(right)
+        right.otherNotRefines(left)
         return null
     }
 
