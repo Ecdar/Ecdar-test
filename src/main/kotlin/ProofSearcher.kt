@@ -51,6 +51,12 @@ class ProofSearcher {
                     return comp
                 }
             }
+
+            for (child in component.children) {
+                child.parents.add(component)
+                newlyMarkedComponents.add(child)
+            }
+
             components.add(component)
             newlyMarkedComponents.add(component)
             return component

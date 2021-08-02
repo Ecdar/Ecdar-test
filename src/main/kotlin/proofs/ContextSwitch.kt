@@ -1,0 +1,4 @@
+package proofs
+
+class ContextSwitch {
+}
