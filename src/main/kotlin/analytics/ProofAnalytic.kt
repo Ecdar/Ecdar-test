@@ -1,5 +1,6 @@
 package analytics
 import parsing.System
+import proofs.Proof
 
 interface ProofAnalytic {
 
@@ -12,6 +13,10 @@ interface ProofAnalytic {
     }
 
     fun recordIteration(dirtyComponents: HashSet<System>, components: ArrayList<System>){
+
+    }
+
+    fun recordProofIteration(dirtyComponents: HashSet<System>, components: ArrayList<System>, proof: Proof){
 
     }
 

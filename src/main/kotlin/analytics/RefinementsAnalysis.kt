@@ -1,6 +1,7 @@
 package analytics
 
 import parsing.System
+import proofs.Proof
 
 class RefinementsAnalysis : ProofAnalytic {
     var startingRefinements = 0

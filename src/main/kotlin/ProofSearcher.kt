@@ -40,7 +40,7 @@ class ProofSearcher {
         while (dirtyComponents.isNotEmpty()) {
             dirtyComponents = searchIteration(dirtyComponents, allComponents)
 
-            analytics.forEach{analytic -> analytic.recordIteration(dirtyComponents, components)}
+            analytics.forEach{analytic -> analytic.recordIteration(dirtyComponents, allComponents)}
         }
 
         return allComponents
@@ -50,19 +50,19 @@ class ProofSearcher {
         dirty_components: HashSet<System>,
         all_components: ArrayList<System>
     ): HashSet<System> {
-        val context = IterationContext(all_components)
-        for (comp in dirty_components) {
+        val context = IterationContext(all_components, dirty_components)
+        for (theorem in theorems) {
 
-            for (theorem in theorems) {
+            for (comp in dirty_components) {
                 theorem.search(comp, context)
             }
+            analytics.forEach{analytic -> analytic.recordProofIteration(dirty_components, all_components, theorem)}
         }
 
         return context.newlyMarkedComponents
     }
 
-    class IterationContext(components: ArrayList<System>) {
-        var components = components
+    class IterationContext(val components: ArrayList<System>, val dirtyComponents: HashSet<System>) {
         var newlyMarkedComponents = HashSet<System>()
 
         fun setDirty(component: System) {
