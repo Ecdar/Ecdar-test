@@ -13,9 +13,9 @@ internal class RefinementTransitivityTest {
         println("Refinements: " + refinementCount(RelationLoader.relations))
 
         var searcher = ProofSearcher()
-        searcher.findNewRelations(RelationLoader.relations)
+        var newRelation = searcher.findNewRelations(RelationLoader.relations)
 
-        println("Refinements: " + refinementCount(RelationLoader.relations))
+        println("Refinements: " + refinementCount(newRelation))
     }
 
     fun refinementCount(components: ArrayList<System>): Int{
