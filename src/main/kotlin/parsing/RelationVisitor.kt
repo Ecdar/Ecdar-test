@@ -72,6 +72,10 @@ class RelationVisitor : RelationParserBaseVisitor<System?>() {
             }
         }
 
+        for (child in sys.children) {
+            child.parents.add(sys)
+        }
+
         components.add(sys)
         return sys
     }

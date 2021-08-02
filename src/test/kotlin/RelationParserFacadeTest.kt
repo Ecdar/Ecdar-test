@@ -27,11 +27,18 @@ internal class RelationParserFacadeTest {
 
     @Test
     fun visit1() {
+
         for (comp in RelationLoader.relations) {
-            val refines = comp.thisRefines.toString()
-            val oRefines = comp.refinesThis.toString()
+            val refines = comp.thisRefines.toArray().sortedWith(
+                compareBy(String.CASE_INSENSITIVE_ORDER) { it.toString() }
+            ).toString()
+            val oRefines = comp.refinesThis.toArray().sortedWith(
+                compareBy(String.CASE_INSENSITIVE_ORDER) { it.toString() }
+            ).toString()
 
             println("$comp refines $refines and $oRefines refine it")
         }
+
+
     }
 }

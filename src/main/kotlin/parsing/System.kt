@@ -6,10 +6,14 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
 interface System {
-    val refinesThis: HashSet<System>
-    val thisRefines: HashSet<System>
-    val notRefinesThis: HashSet<System>
-    val thisNotRefines: HashSet<System>
+
+    var children: HashSet<System>
+    var refinesThis: HashSet<System>
+    var thisRefines: HashSet<System>
+    var notRefinesThis: HashSet<System>
+    var thisNotRefines: HashSet<System>
+    var parents: HashSet<System>
+    val depth: Int
     var isLocallyConsistent: Optional<Boolean>
 
     fun sameAs(other: System): Boolean
@@ -38,19 +42,16 @@ class Component(val prefix: String, val comp: String) : System {
         assert(prefix in prefixMap) { "Unknown prefix $prefix for component $comp" }
     }
 
-    var rt = HashSet<System>()
-    var tr = HashSet<System>()
-    var nrt = HashSet<System>()
-    var tnr = HashSet<System>()
+    override var children = HashSet<System>()
+    override var refinesThis = HashSet<System>()
+    override var thisRefines = HashSet<System>()
+    override var notRefinesThis = HashSet<System>()
+    override var thisNotRefines = HashSet<System>()
+    override var parents = HashSet<System>()
+    override val depth: Int
+        get() = 0
     override var isLocallyConsistent : Optional<Boolean> = Optional.empty()
-    override val refinesThis: HashSet<System>
-        get() = rt
-    override val thisRefines: HashSet<System>
-        get() = tr
-    override val notRefinesThis: HashSet<System>
-        get() = nrt
-    override val thisNotRefines: HashSet<System>
-        get() = tnr
+
 
     override fun sameAs(other: System): Boolean {
         if(other is Component) {
@@ -67,7 +68,6 @@ class Component(val prefix: String, val comp: String) : System {
 }
 
 class Conjunction : System {
-    var children = HashSet<System>()
     constructor(left: System, right: System) {
         if(left is Conjunction) {
             children.addAll(left.children)
@@ -81,23 +81,26 @@ class Conjunction : System {
         }
     }
 
-    constructor(children: HashSet<System>){
-        this.children = children
+    constructor(children: HashSet<System>) {
+        for (child in children){
+            if(child is Conjunction) {
+                this.children.addAll(child.children)
+            } else {
+                this.children.add(child)
+            }
+        }
     }
 
-    var rt = HashSet<System>()
-    var tr = HashSet<System>()
-    var nrt = HashSet<System>()
-    var tnr = HashSet<System>()
+    override var children = HashSet<System>()
+    override var refinesThis = HashSet<System>()
+    override var thisRefines = HashSet<System>()
+    override var notRefinesThis = HashSet<System>()
+    override var thisNotRefines = HashSet<System>()
+    override var parents = HashSet<System>()
+    override val depth: Int
+        get() = 1 + (this.children.map { it.depth }.max()?: 0)
     override var isLocallyConsistent : Optional<Boolean> = Optional.empty()
-    override val refinesThis: HashSet<System>
-        get() = rt
-    override val thisRefines: HashSet<System>
-        get() = tr
-    override val notRefinesThis: HashSet<System>
-        get() = nrt
-    override val thisNotRefines: HashSet<System>
-        get() = tnr
+
 
     override fun sameAs(other: System): Boolean {
         if(other is Conjunction) {
@@ -106,14 +109,15 @@ class Conjunction : System {
         return false
     }
 
+
     override fun toString(): String {
-        return "(${children.joinToString(" && ")})"
+        return "(${children.toArray().sortedWith(
+            compareBy(String.CASE_INSENSITIVE_ORDER) { it.toString() }
+        ).joinToString(" && ")})"
     }
 }
 
 class Composition : System {
-    var children = HashSet<System>()
-
     constructor(left: System, right: System) {
         if(left is Composition) {
             children.addAll(left.children)
@@ -127,23 +131,26 @@ class Composition : System {
         }
     }
 
-    constructor(children: HashSet<System>){
-        this.children = children
+    constructor(children: HashSet<System>) {
+        for (child in children){
+            if(child is Composition) {
+                this.children.addAll(child.children)
+            } else {
+                this.children.add(child)
+            }
+        }
     }
 
-    var rt = HashSet<System>()
-    var tr = HashSet<System>()
-    var nrt = HashSet<System>()
-    var tnr = HashSet<System>()
+    override var children = HashSet<System>()
+    override var refinesThis = HashSet<System>()
+    override var thisRefines = HashSet<System>()
+    override var notRefinesThis = HashSet<System>()
+    override var thisNotRefines = HashSet<System>()
+    override var parents = HashSet<System>()
+    override val depth: Int
+        get() = 1 + (this.children.map { it.depth }.max()?: 0)
     override var isLocallyConsistent : Optional<Boolean> = Optional.empty()
-    override val refinesThis: HashSet<System>
-        get() = rt
-    override val thisRefines: HashSet<System>
-        get() = tr
-    override val notRefinesThis: HashSet<System>
-        get() = nrt
-    override val thisNotRefines: HashSet<System>
-        get() = tnr
+
 
     override fun sameAs(other: System): Boolean {
         if(other is Composition) {
@@ -153,8 +160,9 @@ class Composition : System {
     }
 
     override fun toString(): String {
-        return "(${children.joinToString(" || ")})"
+        return "(${children.toArray().sortedWith(
+            compareBy(String.CASE_INSENSITIVE_ORDER) { it.toString() }
+        ).joinToString(" || ")})"
     }
-
 
 }
