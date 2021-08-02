@@ -6,6 +6,7 @@ class ProofSearcher {
         RefinementTransitivity(),
         SelfRefinement(),
         Theorem6Conj2(),
+        ContextSwitch(),
         ConsistentRefinements(),
         ConsistentCompositions()
     )
