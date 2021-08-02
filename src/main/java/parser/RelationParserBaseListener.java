@@ -76,6 +76,30 @@ public class RelationParserBaseListener implements RelationParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLocallyconsistent(RelationParser.LocallyconsistentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLocallyconsistent(RelationParser.LocallyconsistentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNotlocallyconsistent(RelationParser.NotlocallyconsistentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNotlocallyconsistent(RelationParser.NotlocallyconsistentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterSystem(RelationParser.SystemContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -2,6 +2,8 @@ package parsing
 
 import parser.RelationParser
 import parser.RelationParserBaseVisitor
+import java.util.*
+import kotlin.collections.ArrayList
 
 class RelationVisitor : RelationParserBaseVisitor<System?>() {
 
@@ -46,6 +48,20 @@ class RelationVisitor : RelationParserBaseVisitor<System?>() {
         val comp = Component(ctx?.prefix?.text!!, ctx?.comp?.text!!)
 
         return addOrGet(comp)
+    }
+
+    override fun visitLocallyconsistent(ctx: RelationParser.LocallyconsistentContext?): System? {
+        val comp = ctx?.comp?.accept(this)!!
+
+        comp.isLocallyConsistent = Optional.of(true)
+        return null
+    }
+
+    override fun visitNotlocallyconsistent(ctx: RelationParser.NotlocallyconsistentContext?): System? {
+        val comp = ctx?.comp?.accept(this)!!
+
+        comp.isLocallyConsistent = Optional.of(false)
+        return null
     }
 
     private fun addOrGet(sys: System): System {

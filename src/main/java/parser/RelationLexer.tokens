@@ -9,6 +9,8 @@ VAR_NAME=8
 DOT=9
 REFINES=10
 NOTREFINES=11
+LOCALCONSISTENCY=12
+NOTLOCALCONSISTENCY=13
 ';'=3
 '&&'=4
 '||'=5
@@ -17,3 +19,5 @@ NOTREFINES=11
 '.'=9
 '<='=10
 '</='=11
+'locally-consistent:'=12
+'not-locally-consistent:'=13
