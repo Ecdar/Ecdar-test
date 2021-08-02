@@ -20,7 +20,8 @@ object RelationLoader {
         "Loop" to "samples/xml/loop.xml",
         "Delay" to "samples/xml/delayRefinement.xml",
         "Extrapolation" to "samples/xml/extrapolation_test.xml",
-        "Misc" to "samples/xml/misc_test.xml"
+        "Misc" to "samples/xml/misc_test.xml",
+        "Cons" to "samples/xml/ConsTests.xml"
     )
 
     init {
