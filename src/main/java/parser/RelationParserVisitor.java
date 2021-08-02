@@ -41,6 +41,18 @@ public interface RelationParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNonrefinement(RelationParser.NonrefinementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link RelationParser#locallyconsistent}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLocallyconsistent(RelationParser.LocallyconsistentContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RelationParser#notlocallyconsistent}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNotlocallyconsistent(RelationParser.NotlocallyconsistentContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link RelationParser#system}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
