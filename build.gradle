@@ -44,7 +44,7 @@ generateGrammarSource {
 compileJava.dependsOn generateGrammarSource
 sourceSets {
     generated {
-        java.srcDir 'src/main/java/parser/'
+        java.srcDir 'src/main/java/'
     }
 }
 
