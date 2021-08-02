@@ -1,8 +1,12 @@
 package parsing
 
 import facts.RelationLoader.prefixMap
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 
 interface System {
+
     var children: HashSet<System>
     var refinesThis: HashSet<System>
     var thisRefines: HashSet<System>
@@ -10,6 +14,7 @@ interface System {
     var thisNotRefines: HashSet<System>
     var parents: HashSet<System>
     val depth: Int
+    var isLocallyConsistent: Optional<Boolean>
 
     fun sameAs(other: System): Boolean
 
@@ -45,6 +50,8 @@ class Component(val prefix: String, val comp: String) : System {
     override var parents = HashSet<System>()
     override val depth: Int
         get() = 0
+    override var isLocallyConsistent : Optional<Boolean> = Optional.empty()
+
 
     override fun sameAs(other: System): Boolean {
         if(other is Component) {
@@ -92,6 +99,8 @@ class Conjunction : System {
     override var parents = HashSet<System>()
     override val depth: Int
         get() = 1 + (this.children.map { it.depth }.max()?: 0)
+    override var isLocallyConsistent : Optional<Boolean> = Optional.empty()
+
 
     override fun sameAs(other: System): Boolean {
         if(other is Conjunction) {
@@ -140,6 +149,8 @@ class Composition : System {
     override var parents = HashSet<System>()
     override val depth: Int
         get() = 1 + (this.children.map { it.depth }.max()?: 0)
+    override var isLocallyConsistent : Optional<Boolean> = Optional.empty()
+
 
     override fun sameAs(other: System): Boolean {
         if(other is Composition) {

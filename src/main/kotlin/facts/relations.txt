@@ -155,3 +155,25 @@ Delay.Q1 </= Delay.Q2
 Delay.Q2 </= Delay.Q1
 Extrapolation.Inf <= Extrapolation.Inf
 Misc.GuardParan <= Misc.GuardParan
+
+locally-consistent: Cons.G1
+locally-consistent: Cons.G2
+not-locally-consistent: Cons.G3
+not-locally-consistent: Cons.G4
+not-locally-consistent: Cons.G5
+locally-consistent: Cons.G6
+not-locally-consistent: Cons.G7
+locally-consistent: Cons.G8
+not-locally-consistent: Cons.G9
+not-locally-consistent: Cons.G10
+not-locally-consistent: Cons.G11
+not-locally-consistent: Cons.G12
+locally-consistent: Cons.G13
+not-locally-consistent: Cons.G14
+locally-consistent: Cons.G15
+not-locally-consistent: Cons.G16
+locally-consistent: Cons.G17
+locally-consistent: Cons.G18
+not-locally-consistent: Cons.G19
+locally-consistent: Cons.G20
+locally-consistent: Cons.G21
