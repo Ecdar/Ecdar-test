@@ -16,3 +16,5 @@ DOT :  '.';
 
 REFINES : '<=';
 NOTREFINES : '</=';
+LOCALCONSISTENCY: 'locally-consistent:';
+NOTLOCALCONSISTENCY: 'not-locally-consistent:';

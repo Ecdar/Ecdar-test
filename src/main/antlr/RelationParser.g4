@@ -7,10 +7,12 @@ facts    : fact NEWLINE+ facts
         | fact NEWLINE*;
 
 
-fact    : refinement | nonrefinement;
+fact    : refinement | nonrefinement | locallyconsistent | notlocallyconsistent;
 
 refinement : left=system REFINES right=system;
 nonrefinement : left=system NOTREFINES right=system;
+locallyconsistent: LOCALCONSISTENCY comp=system;
+notlocallyconsistent: NOTLOCALCONSISTENCY comp=system;
 
 system    : system COMP system
         | conj_system;

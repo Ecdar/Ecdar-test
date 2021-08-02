@@ -58,6 +58,26 @@ public interface RelationParserListener extends ParseTreeListener {
 	 */
 	void exitNonrefinement(RelationParser.NonrefinementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link RelationParser#locallyconsistent}.
+	 * @param ctx the parse tree
+	 */
+	void enterLocallyconsistent(RelationParser.LocallyconsistentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RelationParser#locallyconsistent}.
+	 * @param ctx the parse tree
+	 */
+	void exitLocallyconsistent(RelationParser.LocallyconsistentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RelationParser#notlocallyconsistent}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotlocallyconsistent(RelationParser.NotlocallyconsistentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RelationParser#notlocallyconsistent}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotlocallyconsistent(RelationParser.NotlocallyconsistentContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link RelationParser#system}.
 	 * @param ctx the parse tree
 	 */
