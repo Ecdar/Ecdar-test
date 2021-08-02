@@ -1,14 +1,12 @@
 import parsing.System
-import proofs.Proof
-import proofs.RefinementTransitivity
-import proofs.SelfRefinement
-import proofs.Theorem6Conj2
+import proofs.*
 
 class ProofSearcher {
     private val theorems: Array<Proof> = arrayOf(
         RefinementTransitivity(),
         SelfRefinement(),
-        Theorem6Conj2()
+        Theorem6Conj2(),
+        ContextSwitch()
     )
 
     fun findNewRelations(components: ArrayList<System>): ArrayList<System> {
