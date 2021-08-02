@@ -1,10 +1,8 @@
 import facts.RelationLoader
-import parsing.RelationParserFacade
-import parsing.RelationVisitor
+import parsing.*
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertTrue
-import parsing.System
 
 internal class ConsistencyTests {
 

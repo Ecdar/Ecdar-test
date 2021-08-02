@@ -42,8 +42,8 @@ class Component(val prefix: String, val comp: String) : System {
     var tr = HashSet<System>()
     var nrt = HashSet<System>()
     var tnr = HashSet<System>()
-    override val refinesThis: HashSet<System>
     override var isLocallyConsistent : Optional<Boolean> = Optional.empty()
+    override val refinesThis: HashSet<System>
         get() = rt
     override val thisRefines: HashSet<System>
         get() = tr
@@ -89,6 +89,7 @@ class Conjunction : System {
     var tr = HashSet<System>()
     var nrt = HashSet<System>()
     var tnr = HashSet<System>()
+    override var isLocallyConsistent : Optional<Boolean> = Optional.empty()
     override val refinesThis: HashSet<System>
         get() = rt
     override val thisRefines: HashSet<System>
@@ -134,6 +135,7 @@ class Composition : System {
     var tr = HashSet<System>()
     var nrt = HashSet<System>()
     var tnr = HashSet<System>()
+    override var isLocallyConsistent : Optional<Boolean> = Optional.empty()
     override val refinesThis: HashSet<System>
         get() = rt
     override val thisRefines: HashSet<System>
