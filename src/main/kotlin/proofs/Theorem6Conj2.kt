@@ -4,20 +4,20 @@ import parsing.Conjunction
 import parsing.System
 
 class Theorem6Conj2: Proof {
-    //HSCC.Theorem6.part2, locally consistent S, U and T: (U <= S) and (U <= T) implies U <= (S && T)
+    //HSCC.Theorem6.part2, locally consistent S, U and T sharing the same alphabet: (U <= S) and (U <= T) implies U <= (S && T)
     override fun search(component: System, ctx: ProofSearcher.IterationContext) {
         if (component.thisRefines.size > 1) {
             val refines = HashSet<System>()
-            refines.addAll(component.thisRefines)
+            //Add the components who share alphabet
+            refines.addAll(component.thisRefines.filter { it.inputs == component.inputs && it.outputs == component.outputs })
             for (lhs in refines) {
                 for (rhs in refines) {
                     if (!lhs.sameAs(rhs)){
                         var newComp : System = Conjunction(lhs, rhs)
                         newComp = ctx.addNewComponent(newComp)
-                        if(newComp.refinesThis.add(component)) {
+
+                        if(component.refines(newComp)){
                             ctx.setDirty(newComp)
-                        }
-                        if(component.thisRefines.add(newComp)) {
                             ctx.setDirty(component)
                         }
                     }

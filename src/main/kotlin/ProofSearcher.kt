@@ -6,9 +6,10 @@ class ProofSearcher {
         RefinementTransitivity(),
         SelfRefinement(),
         Theorem6Conj2(),
-        ContextSwitch(),
+        //ContextSwitch(),
         ConsistentRefinements(),
-        ConsistentCompositions()
+        ConsistentCompositions(),
+        Theorem6Conj1()
     )
 
     fun findNewRelations(components: ArrayList<System>): ArrayList<System> {
@@ -19,7 +20,6 @@ class ProofSearcher {
             println("Iteration")
             dirtyComponents = searchIteration(dirtyComponents, allComponents)
         }
-
         return allComponents
     }
 
