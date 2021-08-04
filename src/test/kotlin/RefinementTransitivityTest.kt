@@ -1,31 +1,87 @@
+import analytics.RefinementsAnalysis
 import facts.RelationLoader
-import parsing.RelationParserFacade
-import parsing.RelationVisitor
-import java.io.File
 import kotlin.test.Test
-import kotlin.test.assertTrue
-import parsing.System
+import proofs.addRefinementProofs
 
 internal class RefinementTransitivityTest {
 
     @Test
     fun visit1() {
-        println("Refinements: " + refinementCount(RelationLoader.relations))
-        println("Components: ${RelationLoader.relations.size}")
+        val refinementAnalytics = RefinementsAnalysis()
+        val searcher = ProofSearcher()
+            .addRefinementProofs()
+            .addAnalytic(refinementAnalytics)
 
-        var searcher = ProofSearcher()
-        var newRelation = searcher.findNewRelations(RelationLoader.relations)
+        searcher.findNewRelations(RelationLoader.relations)
 
-        println("Refinements: " + refinementCount(newRelation))
-        println("Components: ${newRelation.size}")
+        refinementAnalytics.printFindings()
     }
 
-    fun refinementCount(components: ArrayList<System>): Int{
-        var count = 0
-        for (comp in components) {
-            count += comp.thisRefines.count()
-        }
+    @Test
+    fun refinementTransitivityTest1(){
+        val proofSearcher = ProofSearcher().addRefinementProofs()
 
-        return count
+        val factSheet = """
+            AG.A <= AG.B
+            AG.B <= AG.C
+        """.trimIndent()
+
+        val expectedSheet = """
+            AG.A <= AG.C
+        """.trimIndent()
+
+        assert(proofSearchContains(factSheet, expectedSheet,proofSearcher))
+    }
+
+    @Test
+    fun refinementTransitivityTest2(){
+        val proofSearcher = ProofSearcher().addRefinementProofs()
+
+        val factSheet = """
+            AG.A <= AG.B
+            AG.B <= AG.C
+            AG.C <= AG.D
+        """.trimIndent()
+
+        val expectedSheet = """
+            AG.A <= AG.D
+        """.trimIndent()
+
+        assert(proofSearchContains(factSheet, expectedSheet,proofSearcher))
+    }
+
+    @Test
+    fun refinementTransitivityTest3(){
+        val proofSearcher = ProofSearcher().addRefinementProofs()
+
+        val factSheet = """
+            AG.A <= AG.B
+            AG.C <= AG.C
+        """.trimIndent()
+
+        val expectedSheet = """
+            AG.A <= AG.C
+        """.trimIndent()
+
+        assert(!proofSearchContains(factSheet, expectedSheet,proofSearcher))
+    }
+
+    @Test
+    fun refinementTransitivityCircularTest(){
+        val proofSearcher = ProofSearcher().addRefinementProofs()
+
+        val factSheet = """
+            AG.A <= AG.B
+            AG.B <= AG.C
+            AG.C <= AG.A
+        """.trimIndent()
+
+        val expectedSheet = """
+            AG.A <= AG.C
+            AG.B <= AG.A
+            AG.C <= AG.B
+        """.trimIndent()
+
+        assert(proofSearchContains(factSheet, expectedSheet,proofSearcher))
     }
 }
