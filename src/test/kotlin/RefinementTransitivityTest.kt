@@ -7,11 +7,11 @@ internal class RefinementTransitivityTest {
 
     @Test
     fun visit1() {
+
         val refinementAnalytics = RefinementsAnalysis()
         val searcher = ProofSearcher()
             .addRefinementProofs()
             .addAnalytic(refinementAnalytics)
-
         searcher.findNewRelations(RelationLoader.relations)
 
         refinementAnalytics.printFindings()
