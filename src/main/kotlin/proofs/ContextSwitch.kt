@@ -9,6 +9,7 @@ class ContextSwitch : Proof {
     // A <= B and B <= A imply C[A] == C[B] (A can be replaced by B in any context)
     override fun search(component: System, ctx: ProofSearcher.IterationContext) {
         val equal = component.thisRefines.intersect(component.refinesThis)
+
         if (equal.size > 1) {
             for (other in equal) {
                 if (other.sameAs(component)) continue
@@ -20,7 +21,7 @@ class ContextSwitch : Proof {
 
                 if (changed) ctx.setDirty(other)
 
-                for (parent in component.parents) {
+                for (parent in component.parents.toList()) {
                     replace(component, other, parent, ctx)
                 }
 

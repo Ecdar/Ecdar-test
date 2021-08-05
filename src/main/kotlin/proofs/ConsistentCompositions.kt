@@ -11,7 +11,7 @@ class ConsistentCompositions : Proof {
 
             for (other in ctx.dirtyComponents) {
                 if (other.isLocallyConsistent.orElse(false) && other is Component){
-                    if (component.prefix != other.prefix){
+                    if (component.prefix != other.prefix || component == other){
                         //Only allow compositions from components from the same project
                         continue
                     }

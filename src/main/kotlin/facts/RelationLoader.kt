@@ -1,9 +1,15 @@
 package facts
 
+import com.beust.klaxon.Json
+import com.beust.klaxon.JsonObject
+import com.beust.klaxon.JsonReader
+import com.beust.klaxon.Klaxon
 import parsing.RelationParserFacade
 import parsing.RelationVisitor
 import parsing.System
 import java.io.File
+import java.io.FileReader
+import javax.xml.parsers.DocumentBuilderFactory
 
 object RelationLoader {
     private val visitor = RelationVisitor()
@@ -24,11 +30,87 @@ object RelationLoader {
         "Cons" to "samples/xml/ConsTests.xml"
     )
 
+    val actionMap = HashMap<String, Map<String, Set<String>>>()
+
     init {
+        parseActions()
+
+        println(actionMap)
+
         val parse = RelationParserFacade.parse(
             File("src/main/kotlin/facts/relations.txt").readText(Charsets.UTF_8)
         )!!
         parse.accept(visitor)
         relations = visitor.components
+    }
+
+    fun getInputs(prefix: String, name:String) : HashSet<String> {
+        return actionMap[prefix]!![name]!!.filter { it.endsWith("?") && !it.startsWith("*") }.map { it.dropLast(1) }.toHashSet()
+    }
+
+    fun getOutputs(prefix: String, name:String) : HashSet<String> {
+        return actionMap[prefix]!![name]!!.filter { it.endsWith("!") && !it.startsWith("*") }.map { it.dropLast(1) }.toHashSet()
+    }
+
+    private fun parseActions() {
+        for (entry in prefixMap.entries) {
+            val path = entry.value
+            val prefix = entry.key
+            val file = File(path)
+            if (file.isDirectory) {
+                //JSON
+                val map = HashMap<String, Set<String>>()
+
+
+                val components = File(path, "Components")
+                val files = components.listFiles()!!
+                for (comp in files) {
+                    val obj = Klaxon().parser().parse(comp.path.toString()) as JsonObject
+                    val name = obj.string("name")!!
+                    val edges = obj.array<JsonObject>("edges")!!
+                    var actions = HashSet<String>()
+                    for (edge in edges) {
+                        val isInput = edge.string("status")!! == "INPUT"
+                        val sync = edge.string("sync")!!
+                        actions.add("$sync${if (isInput)  "?" else "!"}")
+                    }
+                    map[name] = actions
+                }
+                actionMap[prefix] = map
+            } else {
+                //XML
+                val builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                val doc = builder.parse(file).documentElement
+
+                val children = doc.childNodes
+                val map = HashMap<String, Set<String>>()
+                for (i in 0 until children.length) {
+                    val child = children.item(i)
+
+                    if (child.nodeName == "template") {
+                        val templateChildren = child.childNodes
+                        var name = "Unknown"
+                        var actions = HashSet<String>()
+                        for (j in 0 until templateChildren.length) {
+                            val node = templateChildren.item(j)
+                            if (node.nodeName == "name") {
+                                name = node.textContent
+                            } else if (node.nodeName == "transition") {
+                                var transitionChildren = node.childNodes
+                                for (k in 0 until transitionChildren.length) {
+                                    var label = transitionChildren.item(k)
+                                    if (label.nodeName == "label" && label.attributes.getNamedItem("kind").nodeValue == "synchronisation") {
+                                        actions.add(label.textContent)
+                                    }
+                                }
+                            }
+                        }
+
+                        map[name] = actions
+                    }
+                }
+                actionMap[prefix] = map
+            }
+        }
     }
 }

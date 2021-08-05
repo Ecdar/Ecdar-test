@@ -1,14 +1,12 @@
 package proofs
+
 import parsing.System
 
-class RefinementTransitivity: Proof {
+class RefinementTransitivity : Proof {
     override fun search(component: System, ctx: ProofSearcher.IterationContext) {
-        for (lhs in component.refinesThis){
-            for (rhs in component.thisRefines){
-                if (!lhs.thisRefines.contains(rhs)) {
-                    lhs.thisRefines.add(rhs)
-                    rhs.refinesThis.add(lhs)
-
+        for (lhs in component.refinesThis) {
+            for (rhs in component.thisRefines) {
+                if (lhs.refines(rhs)) {
                     ctx.setDirty(lhs)
                     ctx.setDirty(rhs)
                 }

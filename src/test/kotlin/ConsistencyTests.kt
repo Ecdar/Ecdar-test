@@ -27,6 +27,22 @@ internal class ConsistencyTests {
         assert(nonConsistencyCount == 11)
     }
 
+    @Test
+    fun consistencyComposition() {
+        val proofSearcher = ProofSearcher().addConsistencyProofs()
+
+        val factSheet = """
+            locally-consistent: AG.A
+            locally-consistent: AG.B
+        """.trimIndent()
+
+        val expectedSheet = """
+            locally-consistent: AG.A || AG.B
+        """.trimIndent()
+
+        assert(proofSearchContains(factSheet, expectedSheet,proofSearcher))
+    }
+
     @ExperimentalStdlibApi
     @Test
     fun visit1() {
