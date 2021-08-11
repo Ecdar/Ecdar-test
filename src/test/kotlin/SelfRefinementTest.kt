@@ -1,10 +1,12 @@
 import org.junit.Test
+import proofs.ConsistentRefinements
 import proofs.SelfRefinement
 
 class SelfRefinementTest {
     @Test
     fun selfRefinementTest1(){
-        val proofSearcher = ProofSearcher().addProof(SelfRefinement())
+        val proofSearcher = ProofSearcher()
+            .addProof(SelfRefinement())
 
         val factSheet = """
             locally-consistent: AG.A
@@ -19,15 +21,34 @@ class SelfRefinementTest {
 
     @Test
     fun selfRefinementTest2(){
-        val proofSearcher = ProofSearcher().addProof(SelfRefinement())
+        val proofSearcher = ProofSearcher()
+            .addProof(SelfRefinement())
 
         val factSheet = """
-            AG.A <= AG.B
+            AG.A <= AG.G
         """.trimIndent()
 
         val expectedSheet = """
             AG.A <= AG.A
-            AG.B <= AG.B
+            AG.G <= AG.G
+        """.trimIndent()
+
+        assert(!proofSearchContains(factSheet, expectedSheet,proofSearcher))
+    }
+
+    @Test
+    fun selfRefinementTest3(){
+        val proofSearcher = ProofSearcher()
+            .addProof(SelfRefinement())
+            .addProof(ConsistentRefinements())
+
+        val factSheet = """
+            AG.A <= AG.G
+        """.trimIndent()
+
+        val expectedSheet = """
+            AG.A <= AG.A
+            AG.G <= AG.G
         """.trimIndent()
 
         assert(proofSearchContains(factSheet, expectedSheet,proofSearcher))

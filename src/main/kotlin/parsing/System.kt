@@ -1,6 +1,7 @@
 package parsing
 
-import javax.xml.parsers.*;
+import facts.RelationLoader
+import javax.xml.parsers.*
 import facts.RelationLoader.prefixMap
 import facts.RelationLoader.getInputs
 import facts.RelationLoader.getOutputs
@@ -34,6 +35,9 @@ interface System {
     }
 
     override fun toString(): String
+    fun getProjectFolder(): String
+
+    fun getName(): String
 }
 
 class Component(val prefix: String, val comp: String) : System {
@@ -61,6 +65,14 @@ class Component(val prefix: String, val comp: String) : System {
         return false
     }
 
+    override fun getProjectFolder(): String {
+        return prefixMap[prefix]!!
+    }
+
+    override fun getName(): String {
+        return comp
+    }
+
     override fun toString(): String {
         return "$prefix.$comp"
     }
@@ -69,6 +81,8 @@ class Component(val prefix: String, val comp: String) : System {
 
 class Conjunction : System {
     constructor(left: System, right: System) {
+        assert(left.getProjectFolder() == right.getProjectFolder())
+
         if (left is Conjunction) {
             children.addAll(left.children)
         } else {
@@ -85,6 +99,10 @@ class Conjunction : System {
     }
 
     constructor(children: HashSet<System>) {
+        val folder = children.elementAt(0).getProjectFolder()
+        assert(children.all { c -> c.getProjectFolder() == folder })
+
+
         assert(children.size > 1)
         for (child in children) {
             if (child is Conjunction) {
@@ -134,6 +152,22 @@ class Conjunction : System {
         return false
     }
 
+    override fun getProjectFolder(): String {
+        val it = children.iterator()
+        val folderPath = it.next().getProjectFolder()
+        for (system in it){
+            if (folderPath != system.getProjectFolder()){
+                throw Exception("Children have different projects folders")
+            }
+        }
+        return folderPath
+    }
+
+    override fun getName(): String {
+        return "(${children.toArray().map { child -> (child as System).getName() }.sortedWith(
+            compareBy(String.CASE_INSENSITIVE_ORDER) { it }
+        ).joinToString(" && ")})"
+    }
 
     override fun toString(): String {
         return "(${
@@ -148,6 +182,7 @@ class Conjunction : System {
 
 class Composition : System {
     constructor(left: System, right: System) {
+        assert(left.getProjectFolder() == right.getProjectFolder())
         if (left is Composition) {
             children.addAll(left.children)
         } else {
@@ -165,6 +200,8 @@ class Composition : System {
 
     constructor(children: HashSet<System>) {
         assert(children.size > 1)
+        val folder = children.elementAt(0).getProjectFolder()
+        assert(children.all { c -> c.getProjectFolder() == folder })
         for (child in children) {
             if (child is Composition) {
                 this.children.addAll(child.children)
@@ -206,6 +243,23 @@ class Composition : System {
             return children == other.children
         }
         return false
+    }
+
+    override fun getProjectFolder(): String {
+        val it = children.iterator()
+        val folderPath = it.next().getProjectFolder()
+        for (system in it){
+            if (folderPath != system.getProjectFolder()){
+                throw Exception("Children have different projects folders")
+            }
+        }
+        return folderPath
+    }
+
+    override fun getName(): String {
+        return "(${children.toArray().map { child -> (child as System).getName() }.sortedWith(
+            compareBy(String.CASE_INSENSITIVE_ORDER) { it }
+        ).joinToString(" || ")})"
     }
 
     override fun toString(): String {

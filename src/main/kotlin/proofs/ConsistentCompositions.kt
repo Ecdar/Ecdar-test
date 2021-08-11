@@ -7,25 +7,19 @@ import java.util.*
 
 class ConsistentCompositions : Proof {
     override fun search(component: System, ctx: ProofSearcher.IterationContext) {
-        if (component.isLocallyConsistent.orElse(false) && component is Component){
-
-            for (other in ctx.dirtyComponents) {
-                if (other.isLocallyConsistent.orElse(false) && other is Component){
-                    if (component.prefix != other.prefix || component == other){
-                        //Only allow compositions from components from the same project
-                        continue
-                    }
-
-                    val comp = ctx.addNewComponent(Composition(component, other))
-
-                    if (comp.isLocallyConsistent.isEmpty){
-                        comp.isLocallyConsistent = Optional.of(true)
-
-                        ctx.setDirty(component)
-                        ctx.setDirty(other)
-                        ctx.setDirty(comp)
-                    }
-
+        if (!component.isLocallyConsistent.orElse(true) && component is Composition){
+            if (component.children.all { c -> c.isLocallyConsistent.orElse(false) }) {
+                component.isLocallyConsistent = Optional.of(true)
+                ctx.setDirty(component)
+            }else if (component.children.any {c -> !c.isLocallyConsistent.orElse(true)}){
+                component.isLocallyConsistent = Optional.of(false)
+                ctx.setDirty(component)
+            }
+        }else if (component.isLocallyConsistent.orElse(false) && component is Composition){
+            for (child in component.children){
+                if (child.isLocallyConsistent.isEmpty){
+                    child.isLocallyConsistent = Optional.of(true)
+                    ctx.setDirty(child)
                 }
             }
         }

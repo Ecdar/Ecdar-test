@@ -22,12 +22,12 @@ internal class RefinementTransitivityTest {
         val proofSearcher = ProofSearcher().addRefinementProofs()
 
         val factSheet = """
-            AG.A <= AG.B
-            AG.B <= AG.C
+            AG.A <= AG.G
+            AG.G <= AG.AA
         """.trimIndent()
 
         val expectedSheet = """
-            AG.A <= AG.C
+            AG.A <= AG.AA
         """.trimIndent()
 
         assert(proofSearchContains(factSheet, expectedSheet,proofSearcher))
@@ -38,13 +38,13 @@ internal class RefinementTransitivityTest {
         val proofSearcher = ProofSearcher().addRefinementProofs()
 
         val factSheet = """
-            AG.A <= AG.B
-            AG.B <= AG.C
-            AG.C <= AG.D
+            AG.A <= AG.G
+            AG.G <= AG.AA
+            AG.AA <= AG.Imp
         """.trimIndent()
 
         val expectedSheet = """
-            AG.A <= AG.D
+            AG.A <= AG.Imp
         """.trimIndent()
 
         assert(proofSearchContains(factSheet, expectedSheet,proofSearcher))
@@ -55,12 +55,12 @@ internal class RefinementTransitivityTest {
         val proofSearcher = ProofSearcher().addRefinementProofs()
 
         val factSheet = """
-            AG.A <= AG.B
-            AG.C <= AG.C
+            AG.A <= AG.G
+            AG.AA <= AG.AA
         """.trimIndent()
 
         val expectedSheet = """
-            AG.A <= AG.C
+            AG.A <= AG.AA
         """.trimIndent()
 
         assert(!proofSearchContains(factSheet, expectedSheet,proofSearcher))
@@ -71,15 +71,15 @@ internal class RefinementTransitivityTest {
         val proofSearcher = ProofSearcher().addRefinementProofs()
 
         val factSheet = """
-            AG.A <= AG.B
-            AG.B <= AG.C
-            AG.C <= AG.A
+            AG.A <= AG.G
+            AG.G <= AG.AA
+            AG.AA <= AG.A
         """.trimIndent()
 
         val expectedSheet = """
-            AG.A <= AG.C
-            AG.B <= AG.A
-            AG.C <= AG.B
+            AG.A <= AG.AA
+            AG.G <= AG.A
+            AG.AA <= AG.G
         """.trimIndent()
 
         assert(proofSearchContains(factSheet, expectedSheet,proofSearcher))

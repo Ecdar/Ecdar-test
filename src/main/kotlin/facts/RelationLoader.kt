@@ -35,8 +35,6 @@ object RelationLoader {
     init {
         parseActions()
 
-        println(actionMap)
-
         val parse = RelationParserFacade.parse(
             File("src/main/kotlin/facts/relations.txt").readText(Charsets.UTF_8)
         )!!
@@ -68,7 +66,7 @@ object RelationLoader {
                     val obj = Klaxon().parser().parse(comp.path.toString()) as JsonObject
                     val name = obj.string("name")!!
                     val edges = obj.array<JsonObject>("edges")!!
-                    var actions = HashSet<String>()
+                    val actions = HashSet<String>()
                     for (edge in edges) {
                         val isInput = edge.string("status")!! == "INPUT"
                         val sync = edge.string("sync")!!
@@ -90,15 +88,15 @@ object RelationLoader {
                     if (child.nodeName == "template") {
                         val templateChildren = child.childNodes
                         var name = "Unknown"
-                        var actions = HashSet<String>()
+                        val actions = HashSet<String>()
                         for (j in 0 until templateChildren.length) {
                             val node = templateChildren.item(j)
                             if (node.nodeName == "name") {
                                 name = node.textContent
                             } else if (node.nodeName == "transition") {
-                                var transitionChildren = node.childNodes
+                                val transitionChildren = node.childNodes
                                 for (k in 0 until transitionChildren.length) {
-                                    var label = transitionChildren.item(k)
+                                    val label = transitionChildren.item(k)
                                     if (label.nodeName == "label" && label.attributes.getNamedItem("kind").nodeValue == "synchronisation") {
                                         actions.add(label.textContent)
                                     }

@@ -12,7 +12,7 @@ class Theorem6Conj2: Proof {
             refines.addAll(component.thisRefines.filter { it.inputs == component.inputs && it.outputs == component.outputs })
             for (lhs in refines) {
                 for (rhs in refines) {
-                    if (!lhs.sameAs(rhs)){
+                    if (!lhs.sameAs(rhs) && rhs.getProjectFolder() == lhs.getProjectFolder()){
                         var newComp : System = Conjunction(lhs, rhs)
                         newComp = ctx.addNewComponent(newComp)
 

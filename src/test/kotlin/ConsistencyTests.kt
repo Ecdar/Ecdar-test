@@ -1,43 +1,25 @@
 import analytics.ComponentsAdded
-import analytics.RefinementsAnalysis
 import facts.RelationLoader
 import parsing.*
 import proofs.ConsistentCompositions
+import proofs.addAllProofs
 import proofs.addConsistencyProofs
-import java.io.File
+import tests.testgeneration.addRefinementTests
 import kotlin.reflect.typeOf
 import kotlin.test.Test
-import kotlin.test.assertTrue
 
 internal class ConsistencyTests {
-
-    @Test
-    fun consistentComponents() {
-        val consistencyCount = consistencyCount(RelationLoader.relations)
-        println("Consistent: " + consistencyCount)
-
-        assert(consistencyCount == 10)
-    }
-
-    @Test
-    fun inconsistentComponents() {
-        val nonConsistencyCount = nonConsistencyCount(RelationLoader.relations)
-        println("Consistent: " + nonConsistencyCount)
-
-        assert(nonConsistencyCount == 11)
-    }
-
     @Test
     fun consistencyComposition() {
         val proofSearcher = ProofSearcher().addConsistencyProofs()
 
         val factSheet = """
             locally-consistent: AG.A
-            locally-consistent: AG.B
+            locally-consistent: AG.G
         """.trimIndent()
 
         val expectedSheet = """
-            locally-consistent: AG.A || AG.B
+            locally-consistent: AG.A || AG.G
         """.trimIndent()
 
         assert(proofSearchContains(factSheet, expectedSheet,proofSearcher))
@@ -48,7 +30,7 @@ internal class ConsistencyTests {
     fun visit1() {
         val compsAddedAnalysis = ComponentsAdded(arrayListOf(typeOf<ConsistentCompositions>()))
         val searcher = ProofSearcher()
-            .addConsistencyProofs()
+            .addAllProofs()
             .addAnalytic(compsAddedAnalysis)
 
         searcher.findNewRelations(RelationLoader.relations)

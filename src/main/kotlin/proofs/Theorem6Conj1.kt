@@ -12,7 +12,7 @@ class Theorem6Conj1 : Proof {
         if (component.isLocallyConsistent.orElse(false)){
             for (other in ctx.dirtyComponents) {
                 if (other.isLocallyConsistent.orElse(false)){
-                    if (other !is Component || component == other || component.inputs != other.inputs || component.outputs != other.outputs){
+                    if (other !is Component || component == other || component.inputs != other.inputs || component.outputs != other.outputs || component.getProjectFolder() != other.getProjectFolder()){
                         continue
                     }
 

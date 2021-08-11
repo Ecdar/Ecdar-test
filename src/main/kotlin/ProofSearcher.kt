@@ -23,7 +23,6 @@ class ProofSearcher {
     }
 
     fun findNewRelations(components: ArrayList<System>): ArrayList<System> {
-
         analytics.forEach{analytic -> analytic.recordStart(components)}
 
         val result = runSearch(components)
@@ -37,10 +36,16 @@ class ProofSearcher {
         val allComponents = ArrayList<System>(components)
         var dirtyComponents = HashSet(components)
 
+        var iteration = 0
+
         while (dirtyComponents.isNotEmpty()) {
+
+            val line = "Dirty components/components: ${dirtyComponents.count()}/${allComponents.count()} it: $iteration"
+            println(line)
             dirtyComponents = searchIteration(dirtyComponents, allComponents)
 
             analytics.forEach{analytic -> analytic.recordIteration(dirtyComponents, allComponents)}
+            iteration++
         }
 
         return allComponents
@@ -51,8 +56,7 @@ class ProofSearcher {
         all_components: ArrayList<System>
     ): HashSet<System> {
         val context = IterationContext(all_components, dirty_components)
-        for (theorem in theorems) {
-
+        for (theorem in theorems){
             for (comp in dirty_components) {
                 theorem.search(comp, context)
             }
