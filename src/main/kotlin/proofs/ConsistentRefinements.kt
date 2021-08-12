@@ -6,8 +6,8 @@ import java.util.*
 
 class ConsistentRefinements : Proof {
     override fun search(component: System, ctx: ProofSearcher.IterationContext) {
-        if (component.refinesThis.count() > 0 || component.thisRefines.count() > 0) {
-            if (!component.isLocallyConsistent.orElse(false)){
+        if (component.refinesThis.isNotEmpty() || component.thisRefines.isNotEmpty()) {
+            if (component.isLocallyConsistent.isEmpty){
                 component.isLocallyConsistent = Optional.of(true)
                 ctx.setDirty(component)
             }

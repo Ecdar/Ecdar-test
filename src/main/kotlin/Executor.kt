@@ -1,35 +1,14 @@
 import parsing.EngineConfiguration
 import tests.Test
-import tests.TestSuite
 import java.io.IOException
-import java.util.concurrent.ConcurrentLinkedQueue
 
-class Executor(private val engineConfigs: Collection<EngineConfiguration>) {
+class Executor(val engineConfig: EngineConfiguration) {
 
-    fun runTests(testSuites: ArrayList<TestSuite>){
-        var testCount = 0
-        val failedTests = ConcurrentLinkedQueue<Test>()
-        val crashedTests = ConcurrentLinkedQueue<Test>()
+    fun runTest(test: Test): Boolean{
+        val command = engineConfig.getCommand(test.projectPath, test.query)
+        val stdout = runCommand(command)!!
 
-        for (testSuite in testSuites) {
-            testCount += testSuite.tests.count()
-            testSuite.tests.parallelStream().forEach{ test ->
-                for (engineConfig in engineConfigs){
-                    val command = engineConfig.getCommand(test.projectPath, test.query)
-                    val stdout = runCommand(command)!!
-
-                    when (test.getResult(stdout)) {
-                        true -> {println("${testSuite.name}::${test.projectPath}::${test.query}:  Passed")}
-                        false -> {println("${testSuite.name}::${test.projectPath}::${test.query}:  Failed"); failedTests.add(test)}
-                        null -> {println("${testSuite.name}::${test.projectPath}::${test.query}:  Error"); crashedTests.add(test)}
-                    }
-                }
-            }
-        }
-        val passedCount = testCount - failedTests.count() - crashedTests.count()
-
-
-        println("tests.Test results: $passedCount passed; ${failedTests.count()} failed; ${crashedTests.count()} crashed")
+        return test.getResult(stdout)
     }
 
     private fun runCommand(command: String): String? {

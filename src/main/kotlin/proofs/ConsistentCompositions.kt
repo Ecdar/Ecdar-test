@@ -7,15 +7,15 @@ import java.util.*
 
 class ConsistentCompositions : Proof {
     override fun search(component: System, ctx: ProofSearcher.IterationContext) {
-        if (!component.isLocallyConsistent.orElse(true) && component is Composition){
-            if (component.children.all { c -> c.isLocallyConsistent.orElse(false) }) {
+        if (component.isLocallyConsistent.isEmpty && component is Composition){
+            if (component.children.all { c -> c.isKnownLocallyConsistent() }) {
                 component.isLocallyConsistent = Optional.of(true)
                 ctx.setDirty(component)
-            }else if (component.children.any {c -> !c.isLocallyConsistent.orElse(true)}){
+            }else if (component.children.any {c -> c.isKnownNotLocallyConsistent()}){
                 component.isLocallyConsistent = Optional.of(false)
                 ctx.setDirty(component)
             }
-        }else if (component.isLocallyConsistent.orElse(false) && component is Composition){
+        }else if (component.isKnownLocallyConsistent() && component is Composition){
             for (child in component.children){
                 if (child.isLocallyConsistent.isEmpty){
                     child.isLocallyConsistent = Optional.of(true)

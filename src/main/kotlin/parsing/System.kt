@@ -23,6 +23,14 @@ interface System {
     var inputs: HashSet<String>
     var outputs: HashSet<String>
 
+    fun isKnownLocallyConsistent(): Boolean {
+        return isLocallyConsistent.orElse(false)
+    }
+
+    fun isKnownNotLocallyConsistent(): Boolean {
+        return !isLocallyConsistent.orElse(true)
+    }
+
     fun sameAs(other: System): Boolean
 
     fun refines(spec: System): Boolean {

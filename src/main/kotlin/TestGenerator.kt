@@ -1,6 +1,6 @@
 import tests.testgeneration.TestRule
 import parsing.System
-import tests.TestSuite
+import tests.Test
 
 class TestGenerator {
     private val testGenerators = ArrayList<TestRule>()
@@ -10,21 +10,16 @@ class TestGenerator {
         return this
     }
 
-    fun generateTests(systems: ArrayList<System>) : ArrayList<TestSuite>{
-        val testSuites = HashMap<String, TestSuite>()
+    fun generateTests(systems: ArrayList<System>) : Collection<Test>{
+        val generatedTests = ArrayList<Test>()
 
         for (testGen in testGenerators){
-            if (!testSuites.containsKey(testGen.getTestSuiteName())){
-                testSuites[testGen.getTestSuiteName()] = TestSuite(testGen.getTestSuiteName())
-            }
-
-            val testSuite = testSuites[testGen.getTestSuiteName()]!!
-
             for (system in systems) {
-                testGen.searchSystem(system, testSuite)
+                val newTests = testGen.getTests(system)
+                generatedTests.addAll(newTests)
             }
         }
 
-        return ArrayList(testSuites.values)
+        return generatedTests
     }
 }

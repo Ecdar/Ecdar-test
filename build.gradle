@@ -27,6 +27,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.junit.jupiter:junit-jupiter:5.7.0'
     antlr "org.antlr:antlr4:4.9.1"
     compile "org.antlr:antlr4-runtime:4.9.1"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -51,6 +52,10 @@ sourceSets {
 
 // show results when running gradlew test
 test {
+    useJUnitPlatform()
+    systemProperties["junit.jupiter.execution.parallel.enabled"] = true
+    systemProperties["junit.jupiter.execution.parallel.mode.default"] = "concurrent"
+    maxParallelForks = Runtime.getRuntime().availableProcessors()
     testLogging {
         events "passed", "skipped", "failed"
     }

@@ -39,9 +39,7 @@ class ProofSearcher {
         var iteration = 0
 
         while (dirtyComponents.isNotEmpty()) {
-
-            val line = "Dirty components/components: ${dirtyComponents.count()}/${allComponents.count()} it: $iteration"
-            println(line)
+            println("Dirty components/components: ${dirtyComponents.count()}/${allComponents.count()} it: $iteration")
             dirtyComponents = searchIteration(dirtyComponents, allComponents)
 
             analytics.forEach{analytic -> analytic.recordIteration(dirtyComponents, allComponents)}

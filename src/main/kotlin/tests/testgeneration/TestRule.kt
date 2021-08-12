@@ -1,8 +1,7 @@
 package tests.testgeneration
 import parsing.System
-import tests.TestSuite
+import tests.Test
 
 interface TestRule {
-    fun getTestSuiteName(): String
-    fun searchSystem(system: System, testSuite: TestSuite)
+    fun getTests(system: System): List<Test>
 }

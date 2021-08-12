@@ -3,6 +3,7 @@ package parsing
 import com.beust.klaxon.Json
 
 data class EngineConfiguration(
+    val name: String,
     @Json(name= "executablePath")
     val path: String,
     @Json(name= "parameterExpression")

@@ -3,33 +3,39 @@ package tests.testgeneration
 import tests.NotSatisfiedTest
 import tests.SatisfiedTest
 import TestGenerator
-import tests.TestSuite
 import parsing.System
+import tests.Test
 
 fun TestGenerator.addConsistencyTests(): TestGenerator{
     return addGenerator(ConsistencyTests())
 }
 
 class ConsistencyTests : TestRule {
-    override fun getTestSuiteName(): String = "Consistency"
+    override fun getTests(system: System): List<Test> = sequence {
+        if (system.isLocallyConsistent.isPresent) {
+            yield(createTest(system))
+        }
+    }.toList()
 
-    override fun searchSystem(system: System, testSuite: TestSuite) {
-        if (system.isLocallyConsistent.isPresent){
-            if (system.isLocallyConsistent.get()){
-                testSuite.addTest(
-                    SatisfiedTest(
-                    system.getProjectFolder(),
-                    "consistency: ${system.getName()}"
-                )
-                )
-            }else{
-                testSuite.addTest(
-                    NotSatisfiedTest(
-                    system.getProjectFolder(),
-                    "consistency: ${system.getName()}"
-                )
-                )
-            }
+    private fun createTest(system: System): Test{
+        return if (system.isLocallyConsistent.get()){
+            createConsistencyTest(system)
+        }else{
+            createNonConsistencyTest(system)
         }
     }
+
+    private fun createConsistencyTest(system: System) =
+        SatisfiedTest(
+            "Consistency",
+            system.getProjectFolder(),
+            "consistency: ${system.getName()}"
+        )
+
+    private fun createNonConsistencyTest(system: System) =
+        NotSatisfiedTest(
+            "NonConsistency",
+            system.getProjectFolder(),
+            "consistency: ${system.getName()}"
+        )
 }
