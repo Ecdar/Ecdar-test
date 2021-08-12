@@ -1,16 +1,17 @@
 package tests.testgeneration
-import tests.SatisfiedTest
+
 import TestGenerator
 import parsing.System
+import tests.SatisfiedTest
 import tests.Test
 
-fun TestGenerator.addRefinementTests(): TestGenerator{
+fun TestGenerator.addRefinementTests(): TestGenerator {
     return addGenerator(RefinementTests())
 }
 
 class RefinementTests : TestRule {
     override fun getTests(system: System): List<Test> = sequence {
-        for (other in system.thisRefines){
+        for (other in system.thisRefines) {
             yield(createTest(system, other))
         }
     }.toList()
@@ -18,7 +19,7 @@ class RefinementTests : TestRule {
     private fun createTest(
         system: System,
         other: System
-    ) : Test {
+    ): Test {
         return if (system == other) {
             createSelfRefinementTest(system)
         } else {
@@ -30,6 +31,10 @@ class RefinementTests : TestRule {
         SatisfiedTest("Refinement", system.getProjectFolder(), "refinement: ${system.getName()} <= ${other.getName()}")
 
     private fun createSelfRefinementTest(system: System) =
-        SatisfiedTest("SelfRefinement", system.getProjectFolder(), "refinement: ${system.getName()} <= ${system.getName()}")
+        SatisfiedTest(
+            "SelfRefinement",
+            system.getProjectFolder(),
+            "refinement: ${system.getName()} <= ${system.getName()}"
+        )
 
 }

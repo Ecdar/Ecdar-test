@@ -3,7 +3,6 @@ package parsing
 import parser.RelationParser
 import parser.RelationParserBaseVisitor
 import java.util.*
-import kotlin.collections.ArrayList
 
 class RelationVisitor : RelationParserBaseVisitor<System?>() {
 

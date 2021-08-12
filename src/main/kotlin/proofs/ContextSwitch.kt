@@ -1,6 +1,6 @@
 package proofs
 
-import parsing.Component
+import ProofSearcher
 import parsing.Composition
 import parsing.Conjunction
 import parsing.System

@@ -2,20 +2,20 @@ package proofs
 
 import ProofSearcher
 
-fun ProofSearcher.addAllProofs() : ProofSearcher{
+fun ProofSearcher.addAllProofs(): ProofSearcher {
     return this.addRefinementProofs()
         .addConsistencyProofs()
-        //.addProof(ContextSwitch()) Incredibly slow generation
+    //.addProof(ContextSwitch()) Incredibly slow generation
 }
 
-fun ProofSearcher.addRefinementProofs() : ProofSearcher {
+fun ProofSearcher.addRefinementProofs(): ProofSearcher {
     return this.addProof(RefinementTransitivity())
         .addProof(SelfRefinement())
         .addProof(Theorem6Conj2())
         .addProof(Theorem6Conj1())
 }
 
-fun ProofSearcher.addConsistencyProofs() : ProofSearcher {
+fun ProofSearcher.addConsistencyProofs(): ProofSearcher {
     return this.addProof(ConsistentRefinements())
         .addProof(ConsistentCompositions())
 }

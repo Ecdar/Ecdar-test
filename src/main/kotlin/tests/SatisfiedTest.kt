@@ -1,7 +1,5 @@
 package tests
 
-import java.lang.Exception
-
 class SatisfiedTest(testSuite: String, projectPath: String, query: String) : Test(testSuite, projectPath, query) {
     override fun getResult(stdout: String): Boolean {
         return when {
@@ -11,7 +9,7 @@ class SatisfiedTest(testSuite: String, projectPath: String, query: String) : Tes
             stdout.endsWith("$query -- Property is satisfied\n") -> {
                 true
             }
-            else ->{
+            else -> {
                 throw Exception("Unexpected stdout from engine")
             }
         }

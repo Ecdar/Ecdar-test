@@ -14,7 +14,7 @@ import java.io.InputStream
 import java.nio.charset.Charset
 import java.util.*
 
-data class AntlrParsingResult(val root : RelationParser.FullContext?, val errors: List<Error>) {
+data class AntlrParsingResult(val root: RelationParser.FullContext?, val errors: List<Error>) {
     fun isCorrect() = errors.isEmpty() && root != null
 }
 
@@ -23,22 +23,44 @@ fun String.toStream(charset: Charset = Charsets.UTF_8) = ByteArrayInputStream(to
 
 object RelationAntlrParserFacade {
 
-    fun parse(code: String) : AntlrParsingResult = parse(code.toStream())
+    fun parse(code: String): AntlrParsingResult = parse(code.toStream())
 
-    fun parse(file: File) : AntlrParsingResult = parse(FileInputStream(file))
+    fun parse(file: File): AntlrParsingResult = parse(FileInputStream(file))
 
-    fun parse(inputStream: InputStream) : AntlrParsingResult {
+    fun parse(inputStream: InputStream): AntlrParsingResult {
         val lexicalAndSyntaticErrors = LinkedList<Error>()
         val errorListener = object : ANTLRErrorListener {
-            override fun reportAmbiguity(p0: Parser?, p1: DFA?, p2: Int, p3: Int, p4: Boolean, p5: BitSet?, p6: ATNConfigSet?) {
+            override fun reportAmbiguity(
+                p0: Parser?,
+                p1: DFA?,
+                p2: Int,
+                p3: Int,
+                p4: Boolean,
+                p5: BitSet?,
+                p6: ATNConfigSet?
+            ) {
                 // Ignored for now
             }
 
-            override fun reportAttemptingFullContext(p0: Parser?, p1: DFA?, p2: Int, p3: Int, p4: BitSet?, p5: ATNConfigSet?) {
+            override fun reportAttemptingFullContext(
+                p0: Parser?,
+                p1: DFA?,
+                p2: Int,
+                p3: Int,
+                p4: BitSet?,
+                p5: ATNConfigSet?
+            ) {
                 // Ignored for now
             }
 
-            override fun syntaxError(recognizer: Recognizer<*, *>?, offendingSymbol: Any?, line: Int, charPositionInline: Int, msg: String, ex: RecognitionException?) {
+            override fun syntaxError(
+                recognizer: Recognizer<*, *>?,
+                offendingSymbol: Any?,
+                line: Int,
+                charPositionInline: Int,
+                msg: String,
+                ex: RecognitionException?
+            ) {
                 lexicalAndSyntaticErrors.add(Error(msg, Exception("{line}{charPositionInline}")))
             }
 
@@ -61,11 +83,11 @@ object RelationAntlrParserFacade {
 
 object RelationParserFacade {
 
-    fun parse(code: String) : RelationParser.FullContext? = parse(code.toStream())
+    fun parse(code: String): RelationParser.FullContext? = parse(code.toStream())
 
-    fun parse(file: File) : RelationParser.FullContext? = parse(FileInputStream(file))
+    fun parse(file: File): RelationParser.FullContext? = parse(FileInputStream(file))
 
-    fun parse(inputStream: InputStream) : RelationParser.FullContext? {
+    fun parse(inputStream: InputStream): RelationParser.FullContext? {
         val antlrParsingResult = RelationAntlrParserFacade.parse(inputStream)
         val lexicalAnsSyntaticErrors = antlrParsingResult.errors
         val antlrRoot = antlrParsingResult.root

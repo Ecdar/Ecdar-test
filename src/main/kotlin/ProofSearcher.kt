@@ -1,33 +1,30 @@
 import analytics.ProofAnalytic
 import parsing.System
 import proofs.Proof
-import proofs.RefinementTransitivity
-import proofs.SelfRefinement
-import proofs.Theorem6Conj2
 
 class ProofSearcher {
     private val theorems = ArrayList<Proof>()
     private val analytics = ArrayList<ProofAnalytic>()
 
-    fun addProof(proof: Proof): ProofSearcher{
-        if (!theorems.contains(proof)){
+    fun addProof(proof: Proof): ProofSearcher {
+        if (!theorems.contains(proof)) {
             theorems.add(proof)
         }
 
         return this
     }
 
-    fun addAnalytic(analytic: ProofAnalytic): ProofSearcher{
+    fun addAnalytic(analytic: ProofAnalytic): ProofSearcher {
         analytics.add(analytic)
         return this
     }
 
     fun findNewRelations(components: ArrayList<System>): ArrayList<System> {
-        analytics.forEach{analytic -> analytic.recordStart(components)}
+        analytics.forEach { analytic -> analytic.recordStart(components) }
 
         val result = runSearch(components)
 
-        analytics.forEach{analytic -> analytic.recordEnd(components)}
+        analytics.forEach { analytic -> analytic.recordEnd(components) }
 
         return result
     }
@@ -42,7 +39,7 @@ class ProofSearcher {
             println("Dirty components/components: ${dirtyComponents.count()}/${allComponents.count()} it: $iteration")
             dirtyComponents = searchIteration(dirtyComponents, allComponents)
 
-            analytics.forEach{analytic -> analytic.recordIteration(dirtyComponents, allComponents)}
+            analytics.forEach { analytic -> analytic.recordIteration(dirtyComponents, allComponents) }
             iteration++
         }
 
@@ -54,11 +51,11 @@ class ProofSearcher {
         all_components: ArrayList<System>
     ): HashSet<System> {
         val context = IterationContext(all_components, dirty_components)
-        for (theorem in theorems){
+        for (theorem in theorems) {
             for (comp in dirty_components) {
                 theorem.search(comp, context)
             }
-            analytics.forEach{analytic -> analytic.recordProofIteration(dirty_components, all_components, theorem)}
+            analytics.forEach { analytic -> analytic.recordProofIteration(dirty_components, all_components, theorem) }
         }
 
         return context.newlyMarkedComponents
@@ -71,7 +68,7 @@ class ProofSearcher {
             newlyMarkedComponents.add(component)
         }
 
-        fun addNewComponent(component: System) : System {
+        fun addNewComponent(component: System): System {
             for (comp in components) {
                 if (comp.sameAs(component)) {
                     return comp

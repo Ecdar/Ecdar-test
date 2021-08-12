@@ -1,14 +1,9 @@
 package parsing
 
-import facts.RelationLoader
-import javax.xml.parsers.*
-import facts.RelationLoader.prefixMap
 import facts.RelationLoader.getInputs
 import facts.RelationLoader.getOutputs
-import java.io.File
+import facts.RelationLoader.prefixMap
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 
 interface System {
 
@@ -51,6 +46,7 @@ interface System {
 class Component(val prefix: String, val comp: String) : System {
     override var inputs = getInputs(prefix, comp)
     override var outputs = getOutputs(prefix, comp)
+
     init {
         assert(prefix in prefixMap) { "Unknown prefix $prefix for component $comp" }
     }
@@ -139,7 +135,6 @@ class Conjunction : System {
     }
 
 
-
     override var inputs = HashSet<String>()
     override var outputs = HashSet<String>()
     override var children = HashSet<System>()
@@ -163,8 +158,8 @@ class Conjunction : System {
     override fun getProjectFolder(): String {
         val it = children.iterator()
         val folderPath = it.next().getProjectFolder()
-        for (system in it){
-            if (folderPath != system.getProjectFolder()){
+        for (system in it) {
+            if (folderPath != system.getProjectFolder()) {
                 throw Exception("Children have different projects folders")
             }
         }
@@ -172,9 +167,11 @@ class Conjunction : System {
     }
 
     override fun getName(): String {
-        return "(${children.toArray().map { child -> (child as System).getName() }.sortedWith(
-            compareBy(String.CASE_INSENSITIVE_ORDER) { it }
-        ).joinToString(" && ")})"
+        return "(${
+            children.toArray().map { child -> (child as System).getName() }.sortedWith(
+                compareBy(String.CASE_INSENSITIVE_ORDER) { it }
+            ).joinToString(" && ")
+        })"
     }
 
     override fun toString(): String {
@@ -256,8 +253,8 @@ class Composition : System {
     override fun getProjectFolder(): String {
         val it = children.iterator()
         val folderPath = it.next().getProjectFolder()
-        for (system in it){
-            if (folderPath != system.getProjectFolder()){
+        for (system in it) {
+            if (folderPath != system.getProjectFolder()) {
                 throw Exception("Children have different projects folders")
             }
         }
@@ -265,9 +262,11 @@ class Composition : System {
     }
 
     override fun getName(): String {
-        return "(${children.toArray().map { child -> (child as System).getName() }.sortedWith(
-            compareBy(String.CASE_INSENSITIVE_ORDER) { it }
-        ).joinToString(" || ")})"
+        return "(${
+            children.toArray().map { child -> (child as System).getName() }.sortedWith(
+                compareBy(String.CASE_INSENSITIVE_ORDER) { it }
+            ).joinToString(" || ")
+        })"
     }
 
     override fun toString(): String {

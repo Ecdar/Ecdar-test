@@ -4,12 +4,12 @@ import com.beust.klaxon.Json
 
 data class EngineConfiguration(
     val name: String,
-    @Json(name= "executablePath")
+    @Json(name = "executablePath")
     val path: String,
-    @Json(name= "parameterExpression")
+    @Json(name = "parameterExpression")
     val parameterExpression: String
 ) {
-    fun getCommand(folder:String, query:String) : String{
+    fun getCommand(folder: String, query: String): String {
         return "$path ${parameterExpression.replace("{input}", folder).replace("{query}", query)}"
     }
 }

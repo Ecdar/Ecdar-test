@@ -1,14 +1,11 @@
 package facts
 
-import com.beust.klaxon.Json
 import com.beust.klaxon.JsonObject
-import com.beust.klaxon.JsonReader
 import com.beust.klaxon.Klaxon
 import parsing.RelationParserFacade
 import parsing.RelationVisitor
 import parsing.System
 import java.io.File
-import java.io.FileReader
 import javax.xml.parsers.DocumentBuilderFactory
 
 object RelationLoader {
@@ -42,12 +39,14 @@ object RelationLoader {
         relations = visitor.components
     }
 
-    fun getInputs(prefix: String, name:String) : HashSet<String> {
-        return actionMap[prefix]!![name]!!.filter { it.endsWith("?") && !it.startsWith("*") }.map { it.dropLast(1) }.toHashSet()
+    fun getInputs(prefix: String, name: String): HashSet<String> {
+        return actionMap[prefix]!![name]!!.filter { it.endsWith("?") && !it.startsWith("*") }.map { it.dropLast(1) }
+            .toHashSet()
     }
 
-    fun getOutputs(prefix: String, name:String) : HashSet<String> {
-        return actionMap[prefix]!![name]!!.filter { it.endsWith("!") && !it.startsWith("*") }.map { it.dropLast(1) }.toHashSet()
+    fun getOutputs(prefix: String, name: String): HashSet<String> {
+        return actionMap[prefix]!![name]!!.filter { it.endsWith("!") && !it.startsWith("*") }.map { it.dropLast(1) }
+            .toHashSet()
     }
 
     private fun parseActions() {
@@ -70,7 +69,7 @@ object RelationLoader {
                     for (edge in edges) {
                         val isInput = edge.string("status")!! == "INPUT"
                         val sync = edge.string("sync")!!
-                        actions.add("$sync${if (isInput)  "?" else "!"}")
+                        actions.add("$sync${if (isInput) "?" else "!"}")
                     }
                     map[name] = actions
                 }

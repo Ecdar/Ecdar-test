@@ -1,12 +1,12 @@
 package tests.testgeneration
 
-import tests.NotSatisfiedTest
-import tests.SatisfiedTest
 import TestGenerator
 import parsing.System
+import tests.NotSatisfiedTest
+import tests.SatisfiedTest
 import tests.Test
 
-fun TestGenerator.addConsistencyTests(): TestGenerator{
+fun TestGenerator.addConsistencyTests(): TestGenerator {
     return addGenerator(ConsistencyTests())
 }
 
@@ -17,10 +17,10 @@ class ConsistencyTests : TestRule {
         }
     }.toList()
 
-    private fun createTest(system: System): Test{
-        return if (system.isLocallyConsistent.get()){
+    private fun createTest(system: System): Test {
+        return if (system.isLocallyConsistent.get()) {
             createConsistencyTest(system)
-        }else{
+        } else {
             createNonConsistencyTest(system)
         }
     }

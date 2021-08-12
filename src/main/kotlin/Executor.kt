@@ -4,7 +4,7 @@ import java.io.IOException
 
 class Executor(val engineConfig: EngineConfiguration) {
 
-    fun runTest(test: Test): Boolean{
+    fun runTest(test: Test): Boolean {
         val command = engineConfig.getCommand(test.projectPath, test.query)
         val stdout = runCommand(command)!!
 
@@ -22,7 +22,7 @@ class Executor(val engineConfig: EngineConfiguration) {
             val out = proc.inputStream.bufferedReader().readText()
             proc.destroyForcibly()
             out
-        } catch(e: IOException) {
+        } catch (e: IOException) {
             e.printStackTrace()
             null
         }

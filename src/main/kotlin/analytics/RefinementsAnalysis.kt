@@ -1,7 +1,6 @@
 package analytics
 
 import parsing.System
-import proofs.Proof
 
 class RefinementsAnalysis : ProofAnalytic {
     var startingRefinements = 0
@@ -28,19 +27,19 @@ class RefinementsAnalysis : ProofAnalytic {
         lastRefinements = next
     }
 
-    fun printFindings(){
+    fun printFindings() {
         println("Refinement proof searching resulted in")
         println("$addedRefinements new refinement relations going from $startingRefinements to $endingRefinements")
         println("Iteration breakdown")
         var iterationCount = 1
-        for (added in addedPerIteration){
+        for (added in addedPerIteration) {
             println("Iteration $iterationCount: $added")
             iterationCount++
         }
     }
 
 
-    private fun refinementCount(components: ArrayList<System>): Int{
+    private fun refinementCount(components: ArrayList<System>): Int {
         var count = 0
         for (comp in components) {
             count += comp.thisRefines.count()

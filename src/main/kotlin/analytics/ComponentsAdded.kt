@@ -4,7 +4,6 @@ import parsing.System
 import proofs.Proof
 import kotlin.reflect.KType
 import kotlin.reflect.full.createType
-import kotlin.reflect.typeOf
 
 class ComponentsAdded(private var proofType: ArrayList<KType>) : ProofAnalytic {
 
@@ -19,7 +18,7 @@ class ComponentsAdded(private var proofType: ArrayList<KType>) : ProofAnalytic {
 
     override fun recordProofIteration(dirtyComponents: HashSet<System>, components: ArrayList<System>, proof: Proof) {
         val next = components.count()
-        if (proofType.contains(proof.javaClass.kotlin.createType())){
+        if (proofType.contains(proof.javaClass.kotlin.createType())) {
             createdPerIteration.add(next - componentCount)
             componentsCreated += next - componentCount
         }
@@ -31,7 +30,7 @@ class ComponentsAdded(private var proofType: ArrayList<KType>) : ProofAnalytic {
         println("Iteration breakdown")
 
         var iterationCount = 1
-        for (created in createdPerIteration){
+        for (created in createdPerIteration) {
             println("Iteration $iterationCount: $created")
             iterationCount++
         }

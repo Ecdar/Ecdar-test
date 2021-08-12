@@ -1,5 +1,6 @@
 package proofs
 
+import ProofSearcher
 import parsing.System
 
 class RefinementTransitivity : Proof {
