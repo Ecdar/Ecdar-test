@@ -4,11 +4,14 @@ import java.io.IOException
 
 class Executor(val engineConfig: EngineConfiguration) {
 
-    fun runTest(test: Test): Boolean {
+    fun runTest(test: Test): TestResult {
         val command = engineConfig.getCommand(test.projectPath, test.query)
         val stdout = runCommand(command)!!
 
-        return test.getResult(stdout)
+        val result = test.getResult(stdout)
+        result.engine = engineConfig.name
+
+        return result
     }
 
     private fun runCommand(command: String): String? {

@@ -1,6 +1,12 @@
 package parsing
 
 import com.beust.klaxon.Json
+import com.beust.klaxon.Klaxon
+import java.io.File
+
+fun parseEngineConfigurations(): List<EngineConfiguration> {
+    return Klaxon().parseArray(File("configuration.json"))!!
+}
 
 data class EngineConfiguration(
     val name: String,

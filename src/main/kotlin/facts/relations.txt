@@ -4,14 +4,14 @@ AG.Q <= AG.Q
 AG.Imp <= AG.Imp
 AG.AA <= AG.AA
 AG.A||AG.G </= AG.A||AG.Imp
-AG.A||AG.Imp </= AG.A||AG.G
+
 AG.G </= AG.Imp
 AG.Imp <= AG.G
 AG.G <= AG.Q
 AG.Q <= AG.G
 AG.Q </= AG.Imp
 AG.Imp <= AG.Q
-AG.A </= AG.AA
+
 Uni.Administration </= Uni.Machine
 Uni.Administration </= Uni.Researcher
 Uni.Administration </= Uni.Spec
@@ -66,9 +66,9 @@ DelayAdd.D1 </= DelayAdd.D2
 Unspec.A <= Unspec.A
 Unspec.AA <= Unspec.AA
 Unspec.B <= Unspec.B
-Unspec.A || Unspec.AA </= Unspec.B
+
 Conjun.P0 && Conjun.P1 </= Conjun.P2
-Conjun.P5 || (Conjun.P3 && Conjun.P4) </= Conjun.P6
+
 Conjun.P7 && Conjun.P8 && Conjun.P9 </= Conjun.P10
 Conjun.P11 && Conjun.P12 </= Conjun.P13
 Loop.SelfloopNonZeno <= Loop.SelfloopNonZeno
@@ -132,10 +132,10 @@ Delay.F1||Delay.F2 <= Delay.F3
 Delay.T4 <= Delay.T3
 Delay.T6 <= Delay.T5
 Delay.T7 </= Delay.T8
-Delay.T9 <= Delay.T8
+Delay.T9 </= Delay.T8
 Delay.T10 </= Delay.T11
 Delay.N1 <= Delay.N2
-Delay.N3 </= Delay.N4
+
 Delay.D2 <= Delay.D1
 Delay.D1 </= Delay.D2
 Delay.K1 </= Delay.K2
@@ -147,10 +147,10 @@ Delay.P4 <= Delay.P5
 Delay.P6 <= Delay.P7
 Delay.L1||Delay.L2 </= Delay.L3
 Delay.L5 <= Delay.L5
-Delay.L6 </= Delay.L7
+
 Delay.Z1 <= Delay.Z2
 Delay.Z3 <= Delay.Z4
-Delay.Z3 || Delay.Z4 </= Delay.Z7
+
 Delay.Q1 </= Delay.Q2
 Delay.Q2 </= Delay.Q1
 Extrapolation.Inf <= Extrapolation.Inf

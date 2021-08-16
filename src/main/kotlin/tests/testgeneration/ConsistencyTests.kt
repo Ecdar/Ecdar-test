@@ -18,7 +18,7 @@ class ConsistencyTests : TestRule {
     }.toList()
 
     private fun createTest(system: System): Test {
-        return if (system.isLocallyConsistent.get()) {
+        return if (system.isKnownLocallyConsistent()) {
             createConsistencyTest(system)
         } else {
             createNonConsistencyTest(system)

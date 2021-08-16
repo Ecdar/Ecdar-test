@@ -6,11 +6,18 @@ import java.util.*
 
 class ConsistentRefinements : Proof {
     override fun search(component: System, ctx: ProofSearcher.IterationContext) {
-        if (component.refinesThis.isNotEmpty() || component.thisRefines.isNotEmpty()) {
-            if (component.isLocallyConsistent.isEmpty) {
-                component.isLocallyConsistent = Optional.of(true)
-                ctx.setDirty(component)
-            }
+        if (hasAnyRefinementRelations(component)) {
+            makeSystemConsistent(component, ctx)
         }
     }
+
+    private fun makeSystemConsistent(component: System, ctx: ProofSearcher.IterationContext) {
+        if (component.isLocallyConsistent.isEmpty) {
+            component.isLocallyConsistent = Optional.of(true)
+            ctx.setDirty(component)
+        }
+    }
+
+    private fun hasAnyRefinementRelations(component: System) =
+        component.refinesThis.isNotEmpty() || component.thisRefines.isNotEmpty()
 }

@@ -61,7 +61,7 @@ class ProofSearcher {
         return context.newlyMarkedComponents
     }
 
-    class IterationContext(val components: ArrayList<System>, val dirtyComponents: HashSet<System>) {
+    class IterationContext(private val components: ArrayList<System>, val dirtyComponents: HashSet<System>) {
         var newlyMarkedComponents = HashSet<System>()
 
         fun setDirty(component: System) {

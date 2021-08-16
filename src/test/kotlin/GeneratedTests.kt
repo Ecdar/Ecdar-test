@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.function.Executable
 import parsing.EngineConfiguration
+import parsing.parseEngineConfigurations
 import proofs.addAllProofs
 import tests.Test
 import tests.testgeneration.addAllTests
@@ -14,7 +15,7 @@ import java.io.File
 class GeneratedTests {
 
     @TestFactory
-    fun main(): Iterable<DynamicTest?>? {
+    fun main(): Iterable<DynamicTest?> {
         val tests = generateTests()
         val engines = parseEngineConfigurations()
 
@@ -25,10 +26,6 @@ class GeneratedTests {
         val initialRelations = RelationLoader.relations
         val allRelations = ProofSearcher().addAllProofs().findNewRelations(initialRelations)
         return TestGenerator().addAllTests().generateTests(allRelations)
-    }
-
-    private fun parseEngineConfigurations(): List<EngineConfiguration> {
-        return Klaxon().parseArray(File("configuration.json"))!!
     }
 
     private fun createExecutableJUnitTests(engines: Collection<EngineConfiguration>, tests: Collection<Test>): ArrayList<DynamicTest> {
@@ -46,8 +43,8 @@ class GeneratedTests {
     }
 
     private fun createJUnitTest(executor: Executor, test: Test): DynamicTest {
-        val testName = "${executor.engineConfig.name}::${test.testSuite}::${test.query}"
-        val testBody = Executable { assertTrue(executor.runTest(test)) }
+        val testName = "${executor.engineConfig.name}::${test.testSuite}::${test.projectPath}::${test.query}"
+        val testBody = Executable { assertTrue(executor.runTest(test).result == "Passed") }
         return dynamicTest(testName, testBody)
     }
 }

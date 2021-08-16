@@ -28,7 +28,11 @@ class RefinementTests : TestRule {
     }
 
     private fun createRefinementTest(system: System, other: System) =
-        SatisfiedTest("Refinement", system.getProjectFolder(), "refinement: ${system.getName()} <= ${other.getName()}")
+        SatisfiedTest(
+            "Refinement",
+            system.getProjectFolder(),
+            "refinement: ${system.getName()} <= ${other.getName()}"
+        )
 
     private fun createSelfRefinementTest(system: System) =
         SatisfiedTest(

@@ -1,26 +1,26 @@
 import facts.RelationLoader
+import org.junit.jupiter.api.Assertions.assertTrue
 import parsing.RelationParserFacade
-import kotlin.test.Test
-import kotlin.test.assertTrue
+import org.junit.jupiter.api.Test
 
 internal class RelationParserFacadeTest {
 
     @Test
     fun parse1() {
-        var result = RelationParserFacade.parse("A.A || A.B </= B.B")
+        val result = RelationParserFacade.parse("A.A || A.B </= B.B")
         assertTrue(result?.exception == null)
     }
 
     @Test
     fun parse2() {
-        var result = RelationParserFacade.parse("A.A || A.B <= B.B \n ")
+        val result = RelationParserFacade.parse("A.A || A.B <= B.B \n ")
         assertTrue(result?.exception == null)
         result?.facts()?.fact()
     }
 
     @Test
     fun parse3() {
-        var result = RelationParserFacade.parse("A.A || A.B <= B.B \n A.A || A.B <= B.B ")
+        val result = RelationParserFacade.parse("A.A || A.B <= B.B \n A.A || A.B <= B.B ")
 
         assertTrue(result?.exception == null)
     }

@@ -50,9 +50,7 @@ object RelationLoader {
     }
 
     private fun parseActions() {
-        for (entry in prefixMap.entries) {
-            val path = entry.value
-            val prefix = entry.key
+        for ((prefix, path) in prefixMap.entries) {
             val file = File(path)
             if (file.isDirectory) {
                 //JSON

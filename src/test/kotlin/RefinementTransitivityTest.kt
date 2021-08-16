@@ -1,6 +1,6 @@
 import analytics.RefinementsAnalysis
 import facts.RelationLoader
-import kotlin.test.Test
+import org.junit.jupiter.api.Test
 import proofs.addRefinementProofs
 
 internal class RefinementTransitivityTest {

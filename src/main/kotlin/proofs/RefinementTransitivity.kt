@@ -7,11 +7,15 @@ class RefinementTransitivity : Proof {
     override fun search(component: System, ctx: ProofSearcher.IterationContext) {
         for (lhs in component.refinesThis) {
             for (rhs in component.thisRefines) {
-                if (lhs.refines(rhs)) {
-                    ctx.setDirty(lhs)
-                    ctx.setDirty(rhs)
-                }
+                addTransitiveRefinement(lhs, rhs, ctx)
             }
+        }
+    }
+
+    private fun addTransitiveRefinement(lhs: System, rhs: System, ctx: ProofSearcher.IterationContext) {
+        if (lhs.refines(rhs)) {
+            ctx.setDirty(lhs)
+            ctx.setDirty(rhs)
         }
     }
 }

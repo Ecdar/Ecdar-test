@@ -1,15 +1,18 @@
 package tests
 
+import TestResult
+
 class SatisfiedTest(testSuite: String, projectPath: String, query: String) : Test(testSuite, projectPath, query) {
-    override fun getResult(stdout: String): Boolean {
+    override fun getResult(stdout: String): TestResult {
         return when {
             stdout.endsWith("$query -- Property is NOT satisfied\n") -> {
-                false
+                TestResult(this, "Failed", stdout)
             }
             stdout.endsWith("$query -- Property is satisfied\n") -> {
-                true
+                TestResult(this, "Passed", stdout)
             }
             else -> {
+                println(stdout)
                 throw Exception("Unexpected stdout from engine")
             }
         }

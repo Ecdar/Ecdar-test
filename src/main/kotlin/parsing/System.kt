@@ -26,6 +26,13 @@ interface System {
         return !isLocallyConsistent.orElse(true)
     }
 
+    fun sharesAlphabet(other: System): Boolean {
+        //Actions with the same name are assumed different if in another project
+        return getProjectFolder() == other.getProjectFolder() &&
+                inputs == other.inputs &&
+                outputs == other.outputs
+    }
+
     fun sameAs(other: System): Boolean
 
     fun refines(spec: System): Boolean {

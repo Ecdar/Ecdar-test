@@ -6,7 +6,7 @@ import proofs.addAllProofs
 import proofs.addConsistencyProofs
 import tests.testgeneration.addRefinementTests
 import kotlin.reflect.typeOf
-import kotlin.test.Test
+import org.junit.jupiter.api.Test
 
 internal class ConsistencyTests {
     @Test
