@@ -1,16 +1,10 @@
-package tests
-
-import Executor
-import ProofSearcher
-import TestGenerator
-import TestResult
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.Klaxon
-import com.beust.klaxon.Parser
 import com.beust.klaxon.Parser.Companion.default
 import facts.RelationLoader
 import parsing.parseEngineConfigurations
 import proofs.addAllProofs
+import tests.Test
 import tests.testgeneration.addAllTests
 import java.io.File
 

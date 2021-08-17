@@ -33,7 +33,7 @@ object RelationLoader {
         parseActions()
 
         val parse = RelationParserFacade.parse(
-            File("src/main/kotlin/facts/relations.txt").readText(Charsets.UTF_8)
+            File("relations.txt").readText(Charsets.UTF_8)
         )!!
         parse.accept(visitor)
         relations = visitor.components

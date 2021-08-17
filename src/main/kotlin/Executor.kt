@@ -15,8 +15,9 @@ class Executor(val engineConfig: EngineConfiguration) {
     }
 
     private fun runCommand(command: String): String? {
+
         return try {
-            val parts = command.split("\\s".toRegex())
+            val parts = splitArguments(command)
             val proc = ProcessBuilder(*parts.toTypedArray())
                 .redirectOutput(ProcessBuilder.Redirect.PIPE)
                 .redirectError(ProcessBuilder.Redirect.INHERIT)
@@ -29,6 +30,25 @@ class Executor(val engineConfig: EngineConfiguration) {
             e.printStackTrace()
             null
         }
+    }
+
+    private fun splitArguments(command: String): ArrayList<String> {
+        val parts = ArrayList<String>()
+        val segments = command.split("\"".toRegex())
+        var isQuoted = false
+        for (segment in segments) {
+            if (segment == "")
+                continue
+
+            if (isQuoted) {
+                parts.add(segment)
+            } else {
+                parts.addAll(segment.trim().split("\\s".toRegex()))
+            }
+
+            isQuoted = !isQuoted
+        }
+        return parts
     }
 
 }
