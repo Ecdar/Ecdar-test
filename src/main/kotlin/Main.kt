@@ -7,6 +7,7 @@ import proofs.addAllProofs
 import tests.Test
 import tests.testgeneration.addAllTests
 import java.io.File
+import java.util.concurrent.ConcurrentLinkedQueue
 
 fun main() {
     val tests = generateTests()
@@ -21,14 +22,14 @@ private fun generateTests(): Collection<Test> {
     return TestGenerator().addAllTests().generateTests(allRelations)
 }
 
-private fun executeTests(tests: Collection<Test>): ArrayList<TestResult> {
+private fun executeTests(tests: Collection<Test>): Iterable<TestResult> {
     val engines = parseEngineConfigurations()
-    val results = ArrayList<TestResult>()
+    val results = ConcurrentLinkedQueue<TestResult>()
 
     for (engine in engines) {
         val executor = Executor(engine)
-        for (test in tests) {
-            results.add(executor.runTest(test))
+        tests.parallelStream().forEach {
+            results.add(executor.runTest(it))
         }
     }
     return results
