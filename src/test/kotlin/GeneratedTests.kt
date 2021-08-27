@@ -1,4 +1,3 @@
-import com.beust.klaxon.Klaxon
 import facts.RelationLoader
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DynamicTest
@@ -10,7 +9,6 @@ import parsing.parseEngineConfigurations
 import proofs.addAllProofs
 import tests.Test
 import tests.testgeneration.addAllTests
-import java.io.File
 
 class GeneratedTests {
 
@@ -28,12 +26,15 @@ class GeneratedTests {
         return TestGenerator().addAllTests().generateTests(allRelations)
     }
 
-    private fun createExecutableJUnitTests(engines: Collection<EngineConfiguration>, tests: Collection<Test>): ArrayList<DynamicTest> {
+    private fun createExecutableJUnitTests(
+        engines: Collection<EngineConfiguration>,
+        tests: Collection<Test>
+    ): ArrayList<DynamicTest> {
         val dynamicTests = ArrayList<DynamicTest>()
 
-        for (engine in engines){
+        for (engine in engines) {
             val executor = Executor(engine)
-            for (test in tests){
+            for (test in tests) {
                 val jUnitTest = createJUnitTest(executor, test)
                 dynamicTests.add(jUnitTest)
             }
@@ -44,7 +45,7 @@ class GeneratedTests {
 
     private fun createJUnitTest(executor: Executor, test: Test): DynamicTest {
         val testName = "${executor.engineConfig.name}::${test.testSuite}::${test.projectPath}::${test.query}"
-        val testBody = Executable { assertTrue(executor.runTest(test).result == "Passed") }
+        val testBody = Executable { assertTrue(executor.runTest(test).result, "Query: ${test.query}") }
         return dynamicTest(testName, testBody)
     }
 }

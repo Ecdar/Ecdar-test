@@ -49,10 +49,6 @@ class ContextSwitch : Proof {
 
         val newParent = ctx.addNewComponent(parentClone)
 
-        if (!newParent.isKnownLocallyConsistent()){
-            return
-        }
-
         val changed = newParent.refinesThis.addAll(parent.refinesThis) or
                 newParent.thisRefines.addAll(parent.thisRefines) or
                 newParent.notRefinesThis.addAll(parent.notRefinesThis) or

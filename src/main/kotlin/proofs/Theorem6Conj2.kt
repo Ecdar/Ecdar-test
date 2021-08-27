@@ -17,8 +17,7 @@ class Theorem6Conj2 : Proof {
                         var newComp: System = Conjunction(lhs, rhs)
                         newComp = ctx.addNewComponent(newComp)
 
-                        if (newComp.isKnownLocallyConsistent() //This condition might be wrong and is waiting for confirmation by Martijn -> https://discord.com/channels/812704528175464458/836933691769880616/875454428608606318
-                            && component.refines(newComp)) {
+                        if (component.refines(newComp)) {
                             ctx.setDirty(newComp)
                             ctx.setDirty(component)
                         }

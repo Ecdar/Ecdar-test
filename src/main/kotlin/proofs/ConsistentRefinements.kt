@@ -12,7 +12,7 @@ class ConsistentRefinements : Proof {
     }
 
     private fun makeSystemConsistent(component: System, ctx: ProofSearcher.IterationContext) {
-        if (component.isLocallyConsistent.isEmpty) {
+        if (component.isLocallyConsistent.isEmpty && ctx.currentIteration == 0) {
             component.isLocallyConsistent = Optional.of(true)
             ctx.setDirty(component)
         }

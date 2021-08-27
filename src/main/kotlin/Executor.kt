@@ -5,12 +5,23 @@ import java.io.IOException
 class Executor(val engineConfig: EngineConfiguration) {
 
     fun runTest(test: Test): TestResult {
+        val reader = runToReader(test)
+        return getTestResult(test, reader)
+    }
+
+    private fun runToReader(test: Test): QueryResultReader {
         val command = engineConfig.getCommand(test.projectPath, test.query)
         val stdout = runCommand(command)!!
+        try {
+        return QueryResultReader(stdout)
+        } catch (e: Exception) {
+            throw Exception("Query: ${test.query} lead to unexpected modelchecker output.")
+        }
+    }
 
-        val result = test.getResult(stdout)
+    private fun getTestResult(test: Test, reader: QueryResultReader): TestResult {
+        val result = test.getResult(reader)
         result.engine = engineConfig.name
-
         return result
     }
 

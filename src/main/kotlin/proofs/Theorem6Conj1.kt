@@ -25,17 +25,15 @@ class Theorem6Conj1 : Proof {
     private fun addNewConjunction(ctx: ProofSearcher.IterationContext, component: System, other: System) {
         val conj = ctx.addNewComponent(Conjunction(component, other))
 
-        if (conj.isKnownLocallyConsistent()) { //This if might be wrong and is waiting for confirmation by Martijn -> https://discord.com/channels/812704528175464458/836933691769880616/875454428608606318
-            setParentRefinesChildren(conj, ctx)
-        }
+        setParentRefinesChildren(conj, ctx)
     }
 
     private fun setParentRefinesChildren(
         parent: System,
         ctx: ProofSearcher.IterationContext
     ) {
-        for (child in parent.children){
-            if (parent.refines(child)){
+        for (child in parent.children) {
+            if (parent.refines(child)) {
                 ctx.setDirty(child)
             }
         }
