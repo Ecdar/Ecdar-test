@@ -12,6 +12,9 @@ fun TestGenerator.addRefinementTests(): TestGenerator {
 class RefinementTests : TestRule {
     override fun getTests(system: System): List<Test> = sequence {
         for (other in system.thisRefines) {
+            if (!system.isKnownLocallyConsistent() || !other.isKnownLocallyConsistent())
+                continue
+
             yield(createTest(system, other))
         }
     }.toList()
