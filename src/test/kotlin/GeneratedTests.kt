@@ -45,7 +45,7 @@ class GeneratedTests {
 
     private fun createJUnitTest(executor: Executor, test: Test): DynamicTest {
         val testName = "${executor.engineConfig.name}::${test.testSuite}::${test.projectPath}::${test.query}"
-        val testBody = Executable { assertTrue(executor.runTest(test).result) }
+        val testBody = Executable { assertTrue(executor.runTest(test).result, "Query: ${test.query}") }
         return dynamicTest(testName, testBody)
     }
 }

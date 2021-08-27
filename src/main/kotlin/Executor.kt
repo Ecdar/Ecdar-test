@@ -12,7 +12,11 @@ class Executor(val engineConfig: EngineConfiguration) {
     private fun runToReader(test: Test): QueryResultReader {
         val command = engineConfig.getCommand(test.projectPath, test.query)
         val stdout = runCommand(command)!!
+        try {
         return QueryResultReader(stdout)
+        } catch (e: Exception) {
+            throw Exception("Query: ${test.query} lead to unexpected modelchecker output.")
+        }
     }
 
     private fun getTestResult(test: Test, reader: QueryResultReader): TestResult {
